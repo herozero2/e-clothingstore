@@ -1,0 +1,10 @@
+/user/vendor/
+/vendor/
+node_modules/
+/.repo/
+.env
+*.log
+qa-*.png
+/outputs/
+.DS_Store
+Thumbs.db

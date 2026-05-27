@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 50px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+form.authForm {
+    background: #ffffff;
+    width: 720px; /* decreased width */
+    min-height: 400px; /* increased length (height) */
+    padding: 60px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.6s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+form.authForm h2 {
+    color: #6a1b9a;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 64px;
+    padding: 18px 45px 18px 20px;
+    border: 2px solid #d1c4e9;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #fafafa;
+    color: #333;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    outline: none;
+    line-height: 1.4;
+}
+
+.form-group input::placeholder {
+    color: transparent;
+}
+
+.form-group label {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+    color: #777;
+    background: #fff;
+    padding: 0 6px;
+    transition: 0.3s ease;
+    pointer-events: none;
+    user-select: none;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 12px;
+    color: #6a1b9a;
+}
+
+.form-group input:focus {
+    border-color: #6a1b9a;
+    background-color: #fff;
+}
+
+.toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #6a1b9a;
+    z-index: 2;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-icon:focus {
+    outline: 2px solid #6a1b9a;
+    outline-offset: 2px;
+}
+
+.button-group {
+    margin-top: 10px;
+}
+
+.button-group button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #6a1b9a;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-group button:hover,
+.button-group button:focus {
+    background-color: #4a148c;
+    transform: scale(1.03);
+    outline: none;
+}
+
+.button-group a {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #f8bbd0;
+    color: #4a148c;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-group a:hover,
+.button-group a:focus {
+    background-color: #f48fb1;
+    transform: scale(1.03);
+    outline: none;
+}
+
+form.authForm p {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #555;
+}
+
+form.authForm p a {
+    color: #6a1b9a;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+form.authForm p a:hover,
+form.authForm p a:focus {
+    text-decoration: underline;
+    outline: none;
+}
+
+form.authForm > p[style*="color: red"],
+form.authForm > p[style*="color: green"] {
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    form.authForm {
+        width: 100%;
+        padding: 30px 25px;
+    }
+
+    .button-group a {
+        width: 100%;
+    }
+}
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+    display: none !important;
+    pointer-events: none;
+    opacity: 0;
+}
+input[type="password"] {
+    appearance: none;
+    -webkit-appearance: none;
+}

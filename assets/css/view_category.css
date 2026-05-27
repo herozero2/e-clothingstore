@@ -1,0 +1,149 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Reset and Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+.view-category-container {
+    width: 1200px;
+    max-width: 100%;
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.6s ease;
+    overflow-x: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header h1 {
+    color: #6a1b9a;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+thead {
+    background-color: #6a1b9a;
+    color: white;
+}
+
+th, td {
+    text-align: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-size: 16px;
+}
+
+.actions a {
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin: 0 5px;
+    text-decoration: none;
+    font-weight: 500;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* View Button */
+.actions .view-btn {
+    background-color: #2196f3;
+}
+
+.actions .view-btn:hover {
+    background-color: #1976d2;
+    transform: scale(1.1);
+}
+
+/* Edit Button */
+.actions .edit-btn {
+    background-color: #4caf50;
+}
+
+.actions .edit-btn:hover {
+    background-color: #388e3c;
+    transform: scale(1.1);
+}
+
+/* Delete Button */
+.actions .delete-btn {
+    background-color: #f44336;
+}
+
+.actions .delete-btn:hover {
+    background-color: #d32f2f;
+    transform: scale(1.1);
+}
+
+/* Icon size adjustment */
+.actions i {
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .view-category-container {
+        padding: 30px 20px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px 12px;
+    }
+
+    .actions a {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+}

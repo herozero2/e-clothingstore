@@ -1,0 +1,520 @@
+-- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: E_Clothing_Store
+-- ------------------------------------------------------
+-- Server version	8.4.3
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `E_Clothing_Store`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `E_Clothing_Store` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `E_Clothing_Store`;
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category`
+--
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'Men','Stylish and comfortable fashion tailored for men.','2025-06-26 15:05:32',NULL),(2,'Women','Trendy, elegant styles made just for women.','2025-06-26 15:06:08',NULL),(3,'Babies','Soft, adorable outfits perfect for little ones.','2025-06-26 15:06:26',NULL),(4,'Free Sized','One-style-fits-all clothing for both men and women.','2025-06-26 15:06:58',NULL);
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `home_sliders`
+--
+
+DROP TABLE IF EXISTS `home_sliders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `home_sliders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `image` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `link_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'user/our_shop.php',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `home_sliders`
+--
+
+LOCK TABLES `home_sliders` WRITE;
+/*!40000 ALTER TABLE `home_sliders` DISABLE KEYS */;
+INSERT INTO `home_sliders` VALUES (9,'blackcoat.webp','user/our_shop.php',1,0,'2026-05-28 00:16:34'),(10,'Red-WeddingBridalGown.avif','user/our_shop.php',2,0,'2026-05-28 00:16:34'),(11,'boykidsdress.jpg','user/our_shop.php',3,0,'2026-05-28 00:16:34'),(13,'5700575.jpg','user/our_shop.php',1,1,'2026-05-28 00:54:51'),(14,'5590205.jpg','user/our_shop.php',1,1,'2026-05-28 00:55:25'),(15,'5590205.jpg','user/our_shop.php',1,1,'2026-05-28 00:55:33');
+/*!40000 ALTER TABLE `home_sliders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mail_queue`
+--
+
+DROP TABLE IF EXISTS `mail_queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mail_queue` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `to_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `to_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `subject` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `body` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(30) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `attempts` int NOT NULL DEFAULT '0',
+  `last_error` text COLLATE utf8mb4_general_ci,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sent_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `status_created_at` (`status`,`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mail_queue`
+--
+
+LOCK TABLES `mail_queue` WRITE;
+/*!40000 ALTER TABLE `mail_queue` DISABLE KEYS */;
+INSERT INTO `mail_queue` VALUES (1,'nabin.koirala2@example.com','Nabin Koirala','Order Placed - Order #14','<h2>Thank you for your order, Nabin Koirala!</h2><p><strong>Order ID:</strong> #14<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> gg<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9845457845<br><strong>Email:</strong> nabin.koirala2@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Festival Topi And Shawl Set</td><td>1</td><td>Rs 1,690.00</td><td>Rs 1,690.00</td></tr></table><p><strong>Grand Total: Rs 1,990.00</strong></p>','pending',0,NULL,'2026-05-28 00:37:27',NULL),(2,'help@example.com','E-Clothing Admin','New Order Received - Order #14','<h2>Thank you for your order, Nabin Koirala!</h2><p><strong>Order ID:</strong> #14<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> gg<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9845457845<br><strong>Email:</strong> nabin.koirala2@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Festival Topi And Shawl Set</td><td>1</td><td>Rs 1,690.00</td><td>Rs 1,690.00</td></tr></table><p><strong>Grand Total: Rs 1,990.00</strong></p>','pending',0,NULL,'2026-05-28 00:37:27',NULL),(3,'roshan.negi@example.com','Roshan Negi','Order Placed - Order #15','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #15<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Dhangadhi, Kailali, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Classic Black T-Shirt </td><td>1</td><td>Rs 2,500.00</td><td>Rs 2,500.00</td></tr></table><p><strong>Grand Total: Rs 2,800.00</strong></p>','pending',0,NULL,'2026-05-28 00:38:07',NULL),(4,'help@example.com','E-Clothing Admin','New Order Received - Order #15','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #15<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Dhangadhi, Kailali, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Classic Black T-Shirt </td><td>1</td><td>Rs 2,500.00</td><td>Rs 2,500.00</td></tr></table><p><strong>Grand Total: Rs 2,800.00</strong></p>','pending',0,NULL,'2026-05-28 00:38:07',NULL),(5,'roshan.negi@example.com','Roshan Negi','Order Placed - Order #16','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #16<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Dhangadhi, Kailali, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Classic Black T-Shirt </td><td>1</td><td>Rs 2,500.00</td><td>Rs 2,500.00</td></tr></table><p><strong>Grand Total: Rs 2,800.00</strong></p>','pending',0,NULL,'2026-05-28 00:38:23',NULL),(6,'help@example.com','E-Clothing Admin','New Order Received - Order #16','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #16<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Dhangadhi, Kailali, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Classic Black T-Shirt </td><td>1</td><td>Rs 2,500.00</td><td>Rs 2,500.00</td></tr></table><p><strong>Grand Total: Rs 2,800.00</strong></p>','pending',0,NULL,'2026-05-28 00:38:23',NULL),(7,'roshan.negi@example.com','Roshan Negi','Order Placed - Order #18','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #18<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Dhangadhi, Kailali, Sudurpashchim Province, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Kurta Set</td><td>1</td><td>Rs 8,000.00</td><td>Rs 8,000.00</td></tr></table><p><strong>Grand Total: Rs 8,300.00</strong></p>','pending',0,NULL,'2026-05-28 00:43:00',NULL),(8,'help@example.com','E-Clothing Admin','New Order Received - Order #18','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #18<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Dhangadhi, Kailali, Sudurpashchim Province, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Kurta Set</td><td>1</td><td>Rs 8,000.00</td><td>Rs 8,000.00</td></tr></table><p><strong>Grand Total: Rs 8,300.00</strong></p>','pending',0,NULL,'2026-05-28 00:43:00',NULL),(9,'roshan.negi@example.com','Roshan Negi','Order Placed - Order #19','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #19<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Main Road, Dhangadhi, Kailali, Sudurpashchim Province, ZIP/Postal code 10900, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><p><strong>Map Location Details:</strong><br>Location name: Main Road<br />\nStreet/Road: Main Road<br />\nArea: Dhangadhi<br />\nCity/Town: Dhangadhi<br />\nDistrict: Kailali<br />\nProvince/State: Sudurpashchim Province<br />\nZIP/Postal code: 10900<br />\nCountry: Nepal<br />\nLatitude: 28.704100<br />\nLongitude: 80.590400</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Black Tuxedo</td><td>1</td><td>Rs 2,500.00</td><td>Rs 2,500.00</td></tr></table><p><strong>Grand Total: Rs 2,800.00</strong></p>','pending',0,NULL,'2026-05-28 00:47:35',NULL),(10,'help@example.com','E-Clothing Admin','New Order Received - Order #19','<h2>Thank you for your order, Roshan Negi!</h2><p><strong>Order ID:</strong> #19<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Main Road, Dhangadhi, Kailali, Sudurpashchim Province, ZIP/Postal code 10900, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9806478012<br><strong>Email:</strong> roshan.negi@example.com</p><p><strong>Map Location Details:</strong><br>Location name: Main Road<br />\nStreet/Road: Main Road<br />\nArea: Dhangadhi<br />\nCity/Town: Dhangadhi<br />\nDistrict: Kailali<br />\nProvince/State: Sudurpashchim Province<br />\nZIP/Postal code: 10900<br />\nCountry: Nepal<br />\nLatitude: 28.704100<br />\nLongitude: 80.590400</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Black Tuxedo</td><td>1</td><td>Rs 2,500.00</td><td>Rs 2,500.00</td></tr></table><p><strong>Grand Total: Rs 2,800.00</strong></p>','pending',0,NULL,'2026-05-28 00:47:35',NULL),(11,'ffdpnepal@gmail.com','ffdp nepal','Order Placed - Order #20','<h2>Thank you for your order, ffdp nepal!</h2><p><strong>Order ID:</strong> #20<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9845457845<br><strong>Email:</strong> ffdpnepal@gmail.com</p><p><strong>Map Location Details:</strong><br>Location name: Bhimdatta<br />\nStreet/Road: Not available<br />\nArea: Not available<br />\nCity/Town: Bhimdatta<br />\nDistrict: Kanchanpur District<br />\nProvince/State: Sudurpashchim Province<br />\nZIP/Postal code: 10400<br />\nCountry: Nepal<br />\nLatitude: 28.972725<br />\nLongitude: 80.170149</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Soft Handkerchief Pack</td><td>1</td><td>Rs 490.00</td><td>Rs 490.00</td></tr></table><p><strong>Grand Total: Rs 790.00</strong></p>','pending',0,NULL,'2026-05-28 00:53:54',NULL),(12,'help@example.com','E-Clothing Admin','New Order Received - Order #20','<h2>Thank you for your order, ffdp nepal!</h2><p><strong>Order ID:</strong> #20<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9845457845<br><strong>Email:</strong> ffdpnepal@gmail.com</p><p><strong>Map Location Details:</strong><br>Location name: Bhimdatta<br />\nStreet/Road: Not available<br />\nArea: Not available<br />\nCity/Town: Bhimdatta<br />\nDistrict: Kanchanpur District<br />\nProvince/State: Sudurpashchim Province<br />\nZIP/Postal code: 10400<br />\nCountry: Nepal<br />\nLatitude: 28.972725<br />\nLongitude: 80.170149</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Soft Handkerchief Pack</td><td>1</td><td>Rs 490.00</td><td>Rs 490.00</td></tr></table><p><strong>Grand Total: Rs 790.00</strong></p>','pending',0,NULL,'2026-05-28 00:53:54',NULL),(13,'gg@gg.com','gg','Order Placed - Order #21','<h2>Thank you for your order, gg!</h2><p><strong>Order ID:</strong> #21<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9876543210<br><strong>Email:</strong> gg@gg.com</p><p><strong>Map Location Details:</strong><br>Location name: Bhimdatta<br />\nStreet/Road: Not available<br />\nArea: Not available<br />\nCity/Town: Bhimdatta<br />\nDistrict: Kanchanpur District<br />\nProvince/State: Sudurpashchim Province<br />\nZIP/Postal code: 10400<br />\nCountry: Nepal<br />\nLatitude: 28.975745<br />\nLongitude: 80.192975</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Soft Handkerchief Pack</td><td>1</td><td>Rs 490.00</td><td>Rs 490.00</td></tr></table><p><strong>Grand Total: Rs 790.00</strong></p>','pending',0,NULL,'2026-05-28 01:03:21',NULL),(14,'help@example.com','E-Clothing Admin','New Order Received - Order #21','<h2>Thank you for your order, gg!</h2><p><strong>Order ID:</strong> #21<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9876543210<br><strong>Email:</strong> gg@gg.com</p><p><strong>Map Location Details:</strong><br>Location name: Bhimdatta<br />\nStreet/Road: Not available<br />\nArea: Not available<br />\nCity/Town: Bhimdatta<br />\nDistrict: Kanchanpur District<br />\nProvince/State: Sudurpashchim Province<br />\nZIP/Postal code: 10400<br />\nCountry: Nepal<br />\nLatitude: 28.975745<br />\nLongitude: 80.192975</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Soft Handkerchief Pack</td><td>1</td><td>Rs 490.00</td><td>Rs 490.00</td></tr></table><p><strong>Grand Total: Rs 790.00</strong></p>','pending',0,NULL,'2026-05-28 01:03:21',NULL),(15,'gg@gg.com','gg','Order Placed - Order #22','<h2>Thank you for your order, gg!</h2><p><strong>Order ID:</strong> #22<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Patasi Store, 2nd floor Watu Marg, Makkhan, Kathmandu Metropolitan City, Kathmandu, Bagamati Province, ZIP/Postal code 44066, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9876543210<br><strong>Email:</strong> gg@gg.com</p><p><strong>Map Location Details:</strong><br>Location name: Patasi Store<br />\nStreet/Road: 2nd floor Watu Marg<br />\nArea: Makkhan<br />\nCity/Town: Kathmandu Metropolitan City<br />\nDistrict: Kathmandu<br />\nProvince/State: Bagamati Province<br />\nZIP/Postal code: 44066<br />\nCountry: Nepal<br />\nLatitude: 27.705705<br />\nLongitude: 85.311527</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Soft Handkerchief Pack</td><td>1</td><td>Rs 490.00</td><td>Rs 490.00</td></tr></table><p><strong>Grand Total: Rs 790.00</strong></p>','pending',0,NULL,'2026-05-28 01:14:07',NULL),(16,'help@example.com','E-Clothing Admin','New Order Received - Order #22','<h2>Thank you for your order, gg!</h2><p><strong>Order ID:</strong> #22<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Patasi Store, 2nd floor Watu Marg, Makkhan, Kathmandu Metropolitan City, Kathmandu, Bagamati Province, ZIP/Postal code 44066, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9876543210<br><strong>Email:</strong> gg@gg.com</p><p><strong>Map Location Details:</strong><br>Location name: Patasi Store<br />\nStreet/Road: 2nd floor Watu Marg<br />\nArea: Makkhan<br />\nCity/Town: Kathmandu Metropolitan City<br />\nDistrict: Kathmandu<br />\nProvince/State: Bagamati Province<br />\nZIP/Postal code: 44066<br />\nCountry: Nepal<br />\nLatitude: 27.705705<br />\nLongitude: 85.311527</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Soft Handkerchief Pack</td><td>1</td><td>Rs 490.00</td><td>Rs 490.00</td></tr></table><p><strong>Grand Total: Rs 790.00</strong></p>','pending',0,NULL,'2026-05-28 01:14:07',NULL),(17,'gg@gg.com','gg','Order Placed - Order #23','<h2>Thank you for your order, gg!</h2><p><strong>Order ID:</strong> #23<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Umit Loundary, 7th Street, Shiva Marga, Baidam, Pokhara, Kaski, Gandaki Province, ZIP/Postal code 00799, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9845457845<br><strong>Email:</strong> gg@gg.com</p><p><strong>Map Location Details:</strong><br>Location name: Umit Loundary<br />\nStreet/Road: 7th Street, Shiva Marga<br />\nArea: Baidam<br />\nCity/Town: Pokhara<br />\nDistrict: Kaski<br />\nProvince/State: Gandaki Province<br />\nZIP/Postal code: 00799<br />\nCountry: Nepal<br />\nLatitude: 28.208157<br />\nLongitude: 83.962870</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Sequin Fairy Dress</td><td>1</td><td>Rs 3,290.00</td><td>Rs 3,290.00</td></tr></table><p><strong>Grand Total: Rs 3,590.00</strong></p>','pending',0,NULL,'2026-05-28 01:21:33',NULL),(18,'help@example.com','E-Clothing Admin','New Order Received - Order #23','<h2>Thank you for your order, gg!</h2><p><strong>Order ID:</strong> #23<br><strong>Payment:</strong> Cash on Delivery<br><strong>Shipping Charge:</strong> Rs 300.00<br><strong>Shipping Address:</strong> Umit Loundary, 7th Street, Shiva Marga, Baidam, Pokhara, Kaski, Gandaki Province, ZIP/Postal code 00799, Nepal<br><strong>Country:</strong> Nepal<br><strong>Mobile:</strong> 9845457845<br><strong>Email:</strong> gg@gg.com</p><p><strong>Map Location Details:</strong><br>Location name: Umit Loundary<br />\nStreet/Road: 7th Street, Shiva Marga<br />\nArea: Baidam<br />\nCity/Town: Pokhara<br />\nDistrict: Kaski<br />\nProvince/State: Gandaki Province<br />\nZIP/Postal code: 00799<br />\nCountry: Nepal<br />\nLatitude: 28.208157<br />\nLongitude: 83.962870</p><table border=\'1\' cellpadding=\'8\' cellspacing=\'0\'><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr><tr><td>Sequin Fairy Dress</td><td>1</td><td>Rs 3,290.00</td><td>Rs 3,290.00</td></tr></table><p><strong>Grand Total: Rs 3,590.00</strong></p>','pending',0,NULL,'2026-05-28 01:21:33',NULL);
+/*!40000 ALTER TABLE `mail_queue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orderdetail`
+--
+
+DROP TABLE IF EXISTS `orderdetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orderdetail` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
+  `variant_id` int DEFAULT NULL,
+  `variant_label` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `variant_sku` varchar(120) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `unit_price` decimal(10,2) DEFAULT NULL,
+  `total` decimal(10,2) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `orderdetail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orderdetail`
+--
+
+LOCK TABLES `orderdetail` WRITE;
+/*!40000 ALTER TABLE `orderdetail` DISABLE KEYS */;
+INSERT INTO `orderdetail` VALUES (1,1,37,NULL,NULL,NULL,1,10000.00,10000.00,'2026-05-27 11:20:00',NULL),(2,2,33,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-27 11:40:00',NULL),(3,3,8,NULL,NULL,NULL,1,6000.00,6000.00,'2026-05-27 12:00:00',NULL),(4,3,16,NULL,NULL,NULL,1,3500.00,3500.00,'2026-05-27 12:00:00',NULL),(5,3,24,NULL,NULL,NULL,1,1000.00,1000.00,'2026-05-27 12:00:00',NULL),(6,4,8,NULL,NULL,NULL,3,6000.00,18000.00,'2026-05-27 12:20:00',NULL),(7,4,27,NULL,NULL,NULL,1,8999.00,8999.00,'2026-05-27 12:20:00',NULL),(8,5,27,NULL,NULL,NULL,1,8999.00,8999.00,'2026-05-27 12:40:00',NULL),(9,5,16,NULL,NULL,NULL,1,3500.00,3500.00,'2026-05-27 12:40:00',NULL),(10,6,2,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-27 13:00:00',NULL),(11,7,3,NULL,NULL,NULL,1,5000.00,5000.00,'2026-05-27 13:20:00',NULL),(12,8,3,NULL,NULL,NULL,1,5000.00,5000.00,'2026-05-27 13:40:00',NULL),(13,9,2,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-28 00:17:42',NULL),(14,10,111,NULL,NULL,NULL,1,2190.00,2190.00,'2026-05-28 10:40:00',NULL),(15,10,110,NULL,NULL,NULL,1,1690.00,1690.00,'2026-05-28 10:40:00',NULL),(16,11,2,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-28 00:22:43',NULL),(17,12,3,NULL,NULL,NULL,1,5000.00,5000.00,'2026-05-28 00:26:00',NULL),(18,13,110,NULL,NULL,NULL,1,1690.00,1690.00,'2026-05-28 00:35:07',NULL),(19,14,110,NULL,NULL,NULL,1,1690.00,1690.00,'2026-05-28 00:37:27',NULL),(20,15,2,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-28 00:38:07',NULL),(21,16,2,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-28 00:38:23',NULL),(22,18,4,NULL,NULL,NULL,1,8000.00,8000.00,'2026-05-28 00:43:00',NULL),(23,19,5,NULL,NULL,NULL,1,2500.00,2500.00,'2026-05-28 00:47:35',NULL),(24,20,109,NULL,NULL,NULL,1,490.00,490.00,'2026-05-28 00:53:54',NULL),(25,21,109,NULL,NULL,NULL,1,490.00,490.00,'2026-05-28 01:03:21',NULL),(26,22,109,NULL,NULL,NULL,1,490.00,490.00,'2026-05-28 01:14:07',NULL),(27,23,89,NULL,NULL,NULL,1,3290.00,3290.00,'2026-05-28 01:21:33',NULL);
+/*!40000 ALTER TABLE `orderdetail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `order_status` varchar(50) COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `payment_method` varchar(50) COLLATE utf8mb4_general_ci DEFAULT 'Cash on Delivery',
+  `tracking_id` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `shipping_charge` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (1,5,'Roshan Negi','Delivered','Cash on Delivery','NP-Courier-00001',500.00,'2026-05-27 11:20:00',NULL),(2,6,'Prakash Bhatt','Delivered','Cash on Delivery','NP-Courier-00002',300.00,'2026-05-27 11:40:00',NULL),(3,7,'Dinesh Phulara','Delivered','Cash on Delivery','NP-Courier-00003',300.00,'2026-05-27 12:00:00',NULL),(4,7,'Dinesh Phulara','Delivered','Cash on Delivery','NP-Courier-00004',300.00,'2026-05-27 12:20:00',NULL),(5,7,'Dinesh Phulara','Pending','Cash on Delivery',NULL,300.00,'2026-05-27 12:40:00',NULL),(6,10,'Nabin Koirala','Shipped','Cash on Delivery','NP-Courier-00006',300.00,'2026-05-27 13:00:00',NULL),(7,10,'Nabin Koirala','Delivered','Cash on Delivery','NP-Courier-00007',500.00,'2026-05-27 13:20:00',NULL),(8,11,'Nabin Koirala','Shipped','Cash on Delivery','NP-Courier-00008',300.00,'2026-05-27 13:40:00','2026-05-28 00:16:47'),(9,11,'Nabin Koirala','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:17:42',NULL),(10,5,'Roshan Negi','Shipped','Cash on Delivery','NP-Courier-g',300.00,'2026-05-28 10:40:00',NULL),(11,5,'Roshan Negi','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:22:43',NULL),(12,11,'Nabin Koirala','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:26:00','2026-05-28 00:29:21'),(13,11,'Nabin Koirala','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:35:07',NULL),(14,11,'Nabin Koirala','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:37:27',NULL),(15,5,'Roshan Negi','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:38:07',NULL),(16,5,'Roshan Negi','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:38:23',NULL),(18,5,'Roshan Negi','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:43:00',NULL),(19,5,'Roshan Negi','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:47:35',NULL),(20,13,'ffdp nepal','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 00:53:54',NULL),(21,15,'gg','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 01:03:21',NULL),(22,15,'gg','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 01:14:07',NULL),(23,15,'gg','Pending','Cash on Delivery',NULL,300.00,'2026-05-28 01:21:33',NULL);
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
+  `price` decimal(10,2) DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `sku` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'Baby Combo Set','Cute and comfy set for little girls! Comes with a black ‘Little Feminist’ t-shirt, soft dark shorts, pink shoes, blue hair tie, and sunglasses. Perfect for fun days out',4500.00,50,'BCS-001-234',3,'babies combo set.jpg','2026-05-25 09:20:00',NULL),(2,'Classic Black T-Shirt ','Soft and simple black t-shirt with a round neck perfect for everyday wear and easy to pair with any outfit.',2500.00,15,'CBT-002-023',1,'blackTshirt.jpg','2026-05-25 09:40:00',NULL),(3,'Blazer','Bold and statement ready, this black blazer features a unique diamond pattern filled with skulls, crowns, and emblems. Perfect for those who want to blend edgy style with formal flair. Great with a white shirt for sharp contrast.',5000.00,17,'BFM-003-232',1,'blazersformen.jpeg','2026-05-25 10:00:00',NULL),(4,'Kurta Set','Cream-colored kurta with matching pants and a colorful embroidered jacket perfect for special occasions and cultural celebrations. Stylish, comfortable, and full of charm.',8000.00,19,'KSB-083-393',3,'boykidsdress.jpg','2026-05-25 10:20:00',NULL),(5,'Black Tuxedo','This is a formal men\'s suit, typically worn for special occasions like weddings or black-tie events.',2500.00,9,'BTM-003-323',1,'blackcoat.webp','2026-05-25 10:40:00',NULL),(6,'Black Wedding Dress','Cassiee Custom Black Wedding Dress by Brides & Tailor, Custom Black Wedding Dress with sheer bodice, Custom Black V neck Dress',5000.00,10,'WDW-394-494',2,'blackdress.webp','2026-05-25 11:00:00',NULL),(7,'Gown','High Neck Ball Gown Black Sequin Wedding Dresses Long Sleeves Sweet 16 Dress',3000.00,15,'BGS-939-393',2,'blackgaun.webp','2026-05-25 11:20:00',NULL),(8,'Black Wedding Gown','Luxury Glitters Wedding Dresses Black Long Sleeves V Neck Tulle Bridal Gown.',6000.00,16,'BWG-983-903',2,'blackweddingdress.webp','2026-05-25 11:40:00',NULL),(9,'Cap','Inspired by a baseball cap, its design is both sleek and sophisticated.\r\nDesigned down to the last detail and made from high-quality materials, this cap offers optimum comfort and a perfect fit.',1500.00,30,'CBB-033-293',4,'cap.jpeg','2026-05-25 12:00:00',NULL),(10,'Casual Boots','Latest Collection Casual Boots For girls High heel Partywear Shoes For Ladies',3500.00,30,'CBW-039-932',2,'casualboot.webp','2026-05-25 12:20:00',NULL),(11,'Tamang Traditional Dress','this dress also know as a bakkhu. lehenga set is a significant part of the Tamang culture in Nepal. \r\n',4899.00,15,'TTD-038-393',2,'culturaldresswomen.jpeg','2026-05-25 12:40:00',NULL),(12,'Party Dress','Flower Girl Dress Kids Formal Birthday Party Dress.',3999.00,30,'PDB-980-382',3,'dressforlittlegirl.webp','2026-05-25 13:00:00',NULL),(13,'Sleeves Shirt','Baby Boys Short Sleeves Shirt with Shorts Set.',1200.00,10,'SSB-032-393',3,'dressset.jpg','2026-05-25 13:20:00',NULL),(14,'Neckline Tulle Princess Dress','Tween Girl Bowknot Asymmetric Neckline Tulle Princess Dress, Suitable For Birthday Gifts, Party, Wedding, Holiday Celebrations, Flower Girl Bridesmaid.',3999.00,10,'NTPD-373-292',3,'gownforlittlegirls.avif','2026-05-25 13:40:00',NULL),(15,'Ankle Boot','Women Retro Plush Warm Autumn Block Heel Ankle Zipper Casual Ankle Boot.',4999.00,35,'ABW-392-231',2,'heelsboot.jpg','2026-05-25 14:00:00',NULL),(16,'Knee High Boot','Scrub Leather Women Fashion Knee High Boots Over The Knee Boots Hoof Heels.',3500.00,38,'KHB-382-094',2,'highheelsboots.jpg','2026-05-25 14:20:00',NULL),(17,'Kurti Sharara Set','Beautiful Rayon Embroidered Red Kurti With Sharara For Women.',4000.00,30,'KSS-392-392',2,'image.png','2026-05-25 14:40:00',NULL),(18,'Blazer','This is a women long black coat or blazer, often referred to as a trench coat or cardigan suit coat. ',5999.00,30,'SKU-123-042',2,'longblazer.jpg','2026-05-25 15:00:00',NULL),(19,'Blazer','Linen Women Suits White Jacket 2Pcs Wedding Tuxedos Business Modern Blazers.',6999.00,20,'BSI-392-192',2,'modernblazer.jpg','2026-05-25 15:20:00',NULL),(20,'Gunyo Choli ','The Gunyo Choli ceremony is a significant coming-of-age tradition in Nepal, typically celebrated when a girl reaches puberty, signifying her transition into womanhood. ',1500.00,30,'GCS-392-032',2,'NepaliGunyoSkirtforKids.webp','2026-05-25 15:40:00',NULL),(21,'Dance Party Dress','Daily Dress for Baby Girls Toddler Girls Sleeveless Star Moon Princess Dress Dance Party Dresses Clothes.',4500.00,30,'DPD-382-392',3,'Rainbow princess dress.webp','2026-05-25 16:00:00',NULL),(22,'Long Bridal Gown','NTI Luxury Off The Shoulder Wedding Dresses A-Line with Court Train Long Bridal Gown.',9999.00,30,'LDG-392-382',2,'Red-WeddingBridalGown.avif','2026-05-25 16:20:00',NULL),(23,'high-top ankle boot','They are characterized by their black color, high-top ankle design, and a sturdy block heel for stability. The boots feature lace-up fastening, often with contrasting eyelets (like the yellow ones visible), and may include a side zipper for ease of wearing. ',4500.00,30,'HTAB-398-182',2,'shoes.jpg','2026-05-25 16:40:00',NULL),(24,'T-Shirt','Short-sleeved t-shirt featuring a white line art graphic of a hand forming a Korean finger heart gesture, with a small heart icon above the fingertips.',1000.00,19,'TSFS-378-338',4,'T-shirtblack.jpg','2026-05-25 17:00:00',NULL),(25,'Behuwa set','Elegant traditional Behuwa set for grooms—includes daura suruwal, topi, shawl, and shoes in iconic multicolored check patterns, symbolizing Nepali heritage and pride. Perfect for weddings and cultural events.',10000.00,30,'BSN-292-020',1,'traditionalgroomdressnepali.jpeg','2026-05-25 17:20:00',NULL),(26,'Crimson Bloom Kurta Set','A graceful blend of tradition and flair, this crimson kurta set features intricate patterns and a flattering silhouette, perfect for festive occasions or elegant evenings.',9999.00,40,'CBKS-302-392',2,'weddingclothes.jpg','2026-05-25 17:40:00',NULL),(27,'Wedding Dress','Princess-style wedding dress with a voluminous tulle skirt with asymmetrical ruffles and a strapless lace and 3D flower bodice with a sweetheart neckline.',8999.00,28,'WDW-394-028',2,'weddingdress.webp','2026-05-25 18:00:00',NULL),(28,'Coat','MenWoolen Blazer Jacket Coats Stand-up Collar Suit Chinese Style Slim Fit Male Casual Business Cardigans Blends Long Coat.',4000.00,20,'CFM-439-392',1,'weddingdressformen.avif','2026-05-25 18:20:00',NULL),(29,'Hand bag','Crimson Luxe Satchel Bold and elegant, this structured red Ferragamo handbag features a sleek top handle, detachable strap, and signature metallic clasp perfect for refined, everyday chic.',1500.00,30,'HBE-392-492',2,'handbag1.jpg','2026-05-25 18:40:00',NULL),(30,'Sunglasses','Sleek black wraparound sunglasses built for speed and sun, with full-coverage lenses and a snug, sporty fit-perfect for active days outdoors.',3000.00,20,'SYU-382-937',1,'sunglass.jpg','2026-05-25 19:00:00',NULL),(31,'Shoulder Bag ','This teal shoulder bag is stylish and easy to carry. It has a smooth finish, a shiny gold clasp, and works great for both casual and dressy outfits.',3000.00,30,'SBW-203-392',2,'bag2.jpg','2026-05-25 19:20:00',NULL),(32,'T-Shirt','Bold and meaningful, this black t-shirt features the powerful phrase \"YAHWEH YIREH\" in clean white text—perfect for those who wear their faith with style and confidence.',3000.00,30,'CTS-382-856',1,'classic black tshirt.jpg','2026-05-25 19:40:00',NULL),(33,'Sunglasses','These Ray-Ban sunglasses feature bold hexagonal lenses in a deep green tint, paired with a slim gold metal frame for a sharp and stylish edge. The signature Ray-Ban logo adds an iconic touch, making them perfect for those who like their fashion with a modern twist.',2500.00,19,'SFM-534-547',1,'florencia-simonini-yhk8ZidU-K4-unsplash.jpg','2026-05-25 20:00:00',NULL),(34,'Shoes','Designed for game-time dominance, these AND1 basketball shoes combine a textured black upper with striking red accents, a speckled white midsole, and a vibrant light-blue outsole. Engineered for grip and comfort, they’re built to keep up with every explosive move on the court.',4000.00,30,'SHY-584-463',1,'shoes101.jpg','2026-05-25 20:20:00',NULL),(35,'Classic White T-Shirt','A clean and simple white T-shirt with a classic fit versatile for everyday wear and easy to pair with any outfit.',4500.00,40,'CWT-484-383',1,'classic white tshirt.jpg','2026-05-25 20:40:00',NULL),(36,'Leather Jacket','Channel cool confidence with this black faux leather biker jacket from ZARA BASIC. It features silver zippers, bold lapels, and a fitted silhouette—perfect for adding an edgy twist to any look.',8000.00,50,'LJU-494-594',1,'lea-ochel-nsRBbE6-YLs-unsplash.jpg','2026-05-25 21:00:00',NULL),(37,'Nike Air Force','Step into playful cool with these pastel-toned Nike Air Force. Featuring a soft blend of light blue, pink, yellow, and white, they pair classic street style with a fresh spring vibe. ',10000.00,39,'NAF-495-945',1,'ryan-plomp-jvoZ-Aux9aw-unsplash.jpg','2026-05-25 21:20:00',NULL),(38,'Bag','Rugged yet refined, this dual-tone brown leather backpack features a flap-top design, twin front pockets, and padded straps for comfort.',2500.00,40,'BLR-485-665',1,'bag101.jpg','2026-05-25 21:40:00',NULL),(39,'Bomber Jackets','This collection of vintage-inspired bomber jackets features rugged leather exteriors with cozy shearling collars in earthy tones like black, brown, and tan. Perfect for timeless street style or a retro edge, each piece carries a worn-in charm and classic aviator vibe.',7000.00,50,'BJS-493-594',1,'juckets101.jpg','2026-05-25 22:00:00',NULL),(40,'Denim  pants','Explore a range of denim fits and washes—from deep indigo to light blue. These jeans offer comfort, versatility, and classic style, perfect for pairing with any top. Whether you prefer a slim cut or a relaxed fit, there’s a pair to match your vibe.',2000.00,50,'DPM-540-493',1,'pants.jpg','2026-05-25 22:20:00','2026-05-28 00:16:56'),(41,'Everyday Cotton Crew T-Shirt','Soft breathable cotton crew neck t-shirt for daily layering and weekend wear.',1290.00,18,'ME-2041',1,'blackTshirt.jpg','2026-05-25 22:20:00',NULL),(42,'Slim Fit Oxford Shirt','Crisp button-down shirt with a clean slim cut for office and smart casual styling.',2190.00,19,'ME-2042',1,'blackcoat.webp','2026-05-25 22:40:00',NULL),(43,'Stretch Denim Jeans','Mid-rise stretch denim jeans with a versatile tapered fit and durable stitching.',2990.00,20,'ME-2043',1,'blazersformen.jpeg','2026-05-25 23:00:00',NULL),(44,'Classic Bomber Jacket','Lightweight bomber jacket with ribbed trims and practical pockets for cool evenings.',4590.00,21,'ME-2044',1,'classic black tshirt.jpg','2026-05-25 23:20:00',NULL),(45,'Wool Blend Overcoat','Structured wool blend coat designed for polished winter outfits.',6990.00,22,'ME-2045',1,'classic white tshirt.jpg','2026-05-25 23:40:00',NULL),(46,'Leather Biker Jacket','Faux leather biker jacket with zip details and a modern fitted profile.',5990.00,23,'ME-2046',1,'lea-ochel-nsRBbE6-YLs-unsplash.jpg','2026-05-26 00:00:00',NULL),(47,'Formal Black Blazer','Sharp black blazer tailored for meetings, ceremonies, and evening events.',5490.00,24,'ME-2047',1,'pants.jpg','2026-05-26 00:20:00',NULL),(48,'Nepali Groom Daura Set','Traditional groom-ready daura suruwal set with heritage inspired styling.',9990.00,25,'ME-2048',1,'ryan-plomp-jvoZ-Aux9aw-unsplash.jpg','2026-05-26 00:40:00',NULL),(49,'Athletic Training Shoes','Cushioned lace-up training shoes for daily movement and casual wear.',3490.00,26,'ME-2049',1,'shoes101.jpg','2026-05-26 01:00:00',NULL),(50,'Air Cushion Sneakers','Street-ready sneakers with a cushioned sole and breathable upper.',4990.00,27,'ME-2050',1,'sunglass.jpg','2026-05-26 01:20:00',NULL),(51,'Canvas Weekend Backpack','Durable backpack with organized compartments for work, travel, and college.',2590.00,28,'ME-2051',1,'bag101.jpg','2026-05-26 01:40:00',NULL),(52,'Polarized Sport Sunglasses','Lightweight wraparound sunglasses with dark lenses for outdoor comfort.',1890.00,29,'ME-2052',1,'juckets101.jpg','2026-05-26 02:00:00',NULL),(53,'Stand Collar Winter Coat','Warm stand collar coat with a clean profile and easy layering fit.',5290.00,30,'ME-2053',1,'traditionalgroomdressnepali.jpeg','2026-05-26 02:20:00',NULL),(54,'Textured Party Blazer','Statement blazer with a textured finish for receptions and festive nights.',6490.00,31,'ME-2054',1,'weddingdressformen.avif','2026-05-26 02:40:00',NULL),(55,'Relaxed Linen Shirt','Breathable linen blend shirt made for warm days and relaxed styling.',2490.00,32,'ME-2055',1,'blackTshirt.jpg','2026-05-26 03:00:00',NULL),(56,'Cargo Utility Pants','Utility pants with roomy pockets, sturdy fabric, and a comfortable straight fit.',3290.00,33,'ME-2056',1,'blackcoat.webp','2026-05-26 03:20:00',NULL),(57,'Minimal White T-Shirt','Clean white t-shirt with a classic neckline and soft everyday fabric.',1190.00,34,'ME-2057',1,'blazersformen.jpeg','2026-05-26 03:40:00',NULL),(58,'Graphic Black T-Shirt','Bold black graphic t-shirt for casual streetwear outfits.',1490.00,35,'ME-2058',1,'classic black tshirt.jpg','2026-05-26 04:00:00',NULL),(59,'Wedding Waistcoat Set','Elegant waistcoat set made for wedding, formal, and cultural functions.',7490.00,36,'ME-2059',1,'classic white tshirt.jpg','2026-05-26 04:20:00',NULL),(60,'Smart Casual Loafers','Easy slip-on loafers with a polished finish for work and evening wear.',3990.00,37,'ME-2060',1,'lea-ochel-nsRBbE6-YLs-unsplash.jpg','2026-05-26 04:40:00',NULL),(61,'Black Evening Dress','Elegant black dress with a flattering silhouette for dinner and party styling.',4990.00,38,'WO-2061',2,'handbag1.jpg','2026-05-26 05:00:00',NULL),(62,'Sequin Ball Gown','Sparkling gown with a graceful fall for receptions and formal celebrations.',8990.00,39,'WO-2062',2,'heelsboot.jpg','2026-05-26 05:20:00',NULL),(63,'Bridal Tulle Gown','Romantic bridal gown with tulle volume and refined detailing.',12990.00,40,'WO-2063',2,'highheelsboots.jpg','2026-05-26 05:40:00',NULL),(64,'Rayon Embroidered Kurti Set','Comfortable embroidered kurti set with a festive yet wearable finish.',3990.00,41,'WO-2064',2,'longblazer.jpg','2026-05-26 06:00:00',NULL),(65,'Crimson Kurta Sharara Set','Vibrant kurta and sharara set designed for family events and festivals.',5490.00,42,'WO-2065',2,'modernblazer.jpg','2026-05-26 06:20:00',NULL),(66,'Modern White Blazer','Clean white blazer with a confident cut for work and occasion wear.',5290.00,43,'WO-2066',2,'Red-WeddingBridalGown.avif','2026-05-26 06:40:00',NULL),(67,'Longline Black Blazer','Longline blazer with sharp lapels and easy layering structure.',5990.00,44,'WO-2067',2,'weddingclothes.jpg','2026-05-26 07:00:00',NULL),(68,'Knee High Fashion Boots','Statement knee-high boots with a sturdy heel and sleek finish.',4290.00,45,'WO-2068',2,'weddingdress.webp','2026-05-26 07:20:00',NULL),(69,'Retro Ankle Boots','Warm retro ankle boots with zipper entry and everyday heel height.',3790.00,46,'WO-2069',2,'womenblazer.jpg','2026-05-26 07:40:00',NULL),(70,'Red Bridal Gown','Rich red bridal gown with a dramatic shape for wedding and engagement events.',11990.00,47,'WO-2070',2,'bag2.jpg','2026-05-26 08:00:00',NULL),(71,'Traditional Tamang Dress','Cultural outfit inspired by Tamang heritage with elegant color detail.',4890.00,48,'WO-2071',2,'blackdress.webp','2026-05-26 08:20:00',NULL),(72,'Gunyo Choli Set','Traditional coming-of-age outfit with a comfortable festive fit.',2990.00,49,'WO-2072',2,'blackgaun.webp','2026-05-26 08:40:00',NULL),(73,'Structured Red Handbag','Elegant red handbag with top handle styling and a polished clasp.',1990.00,50,'WO-2073',2,'blackweddingdress.webp','2026-05-26 09:00:00',NULL),(74,'Teal Shoulder Bag','Compact teal shoulder bag with a smooth finish for everyday outfits.',2490.00,18,'WO-2074',2,'casualboot.webp','2026-05-26 09:20:00',NULL),(75,'Party Heel Boots','High heel boots with party-ready styling and a confident silhouette.',3990.00,19,'WO-2075',2,'culturaldresswomen.jpeg','2026-05-26 09:40:00',NULL),(76,'Printed Wedding Kurta Set','Printed kurta set with refined details for ceremonies and family gatherings.',6590.00,20,'WO-2076',2,'handbag1.jpg','2026-05-26 10:00:00',NULL),(77,'Soft Knit Cardigan','Comfortable layering cardigan with a soft handfeel and relaxed shape.',3290.00,21,'WO-2077',2,'heelsboot.jpg','2026-05-26 10:20:00',NULL),(78,'A-Line Occasion Dress','Graceful A-line dress for office events, dinners, and semi-formal gatherings.',4490.00,22,'WO-2078',2,'highheelsboots.jpg','2026-05-26 10:40:00',NULL),(79,'Everyday Tote Bag','Roomy tote bag with a structured body for work essentials and shopping.',2290.00,23,'WO-2079',2,'longblazer.jpg','2026-05-26 11:00:00',NULL),(80,'Fashion Sunglasses','Modern sunglasses with a flattering frame and UV protective lenses.',1690.00,24,'WO-2080',2,'modernblazer.jpg','2026-05-26 11:20:00',NULL),(81,'Little Feminist Combo Set','Comfortable baby combo set with playful styling and soft fabrics.',2490.00,25,'BA-2081',3,'boykidsdress.jpg','2026-05-26 11:40:00',NULL),(82,'Boys Festive Kurta Set','Festive kurta set for boys with a charming jacket and comfortable pants.',3490.00,26,'BA-2082',3,'boysblazerkids.avif','2026-05-26 12:00:00',NULL),(83,'Girls Floral Party Dress','Sweet floral party dress for birthdays, photos, and family gatherings.',2890.00,27,'BA-2083',3,'dressforlittlegirl.webp','2026-05-26 12:20:00',NULL),(84,'Baby Shirt And Shorts Set','Soft shirt and shorts set for warm days and easy movement.',1690.00,28,'BA-2084',3,'dressset.jpg','2026-05-26 12:40:00',NULL),(85,'Tulle Princess Dress','Princess-style tulle dress with bow detail for special occasions.',3990.00,29,'BA-2085',3,'gownforlittlegirls.avif','2026-05-26 13:00:00',NULL),(86,'Rainbow Dance Dress','Colorful toddler dress designed for comfort and happy movement.',3190.00,30,'BA-2086',3,'NepaliGunyoSkirtforKids.webp','2026-05-26 13:20:00',NULL),(87,'Pasni Ceremony Outfit','Traditional baby outfit made for pasni and family ceremonies.',4590.00,31,'BA-2087',3,'pasnidressforboy.webp','2026-05-26 13:40:00',NULL),(88,'Kids Blazer Set','Smart blazer set for boys with a neat occasion-ready look.',3790.00,32,'BA-2088',3,'Rainbow princess dress.webp','2026-05-26 14:00:00',NULL),(89,'Sequin Fairy Dress','Sparkly fairy dress with soft layers for celebrations and photos.',3290.00,32,'BA-2089',3,'sequin fairy wings dress.avif','2026-05-26 14:20:00',NULL),(90,'Radhe Krishna Kids Set','Traditional kids set inspired by Radha Krishna festive styling.',2990.00,34,'BA-2090',3,'shreekrishna.webp','2026-05-26 14:40:00',NULL),(91,'Soft Teddy Bear Hoodie','Cozy teddy hoodie for cool days and playful everyday wear.',1890.00,35,'BA-2091',3,'shreeradhe.webp','2026-05-26 15:00:00',NULL),(92,'Girls Birthday Gown','Elegant birthday gown with a comfortable fit for long celebrations.',3490.00,36,'BA-2092',3,'teddybear.jpeg','2026-05-26 15:20:00',NULL),(93,'Kids Traditional Dress','Traditional clothing set for cultural programs and family functions.',3190.00,37,'BA-2093',3,'babies combo set.jpg','2026-05-26 15:40:00',NULL),(94,'Baby Winter Boots','Soft baby boots with warm lining and easy slip-on comfort.',1490.00,38,'BA-2094',3,'boykidsdress.jpg','2026-05-26 16:00:00',NULL),(95,'Toddler Cotton T-Shirt','Breathable cotton tee for active toddlers and daily play.',990.00,39,'BA-2095',3,'boysblazerkids.avif','2026-05-26 16:20:00',NULL),(96,'Baby Denim Pants','Soft denim pants with a flexible waist and gentle fabric.',1390.00,40,'BA-2096',3,'dressforlittlegirl.webp','2026-05-26 16:40:00',NULL),(97,'Kids Party Shoes','Comfortable kids party shoes with sturdy soles and neat styling.',1790.00,41,'BA-2097',3,'dressset.jpg','2026-05-26 17:00:00',NULL),(98,'Baby Festival Combo','Festival-ready combo set with soft pieces for easy dressing.',2690.00,42,'BA-2098',3,'gownforlittlegirls.avif','2026-05-26 17:20:00',NULL),(99,'Little Princess Hair Set','Cute accessory set with matching hair styling pieces for kids.',790.00,43,'BA-2099',3,'NepaliGunyoSkirtforKids.webp','2026-05-26 17:40:00',NULL),(100,'Kids Casual Hoodie','Warm casual hoodie for school, outings, and daily comfort.',1990.00,44,'BA-2100',3,'pasnidressforboy.webp','2026-05-26 18:00:00',NULL),(101,'Classic Baseball Cap','Adjustable cap with a clean profile and comfortable daily fit.',990.00,45,'FR-2101',4,'traditionalclothes.jpg','2026-05-26 18:20:00',NULL),(102,'Printed Cotton Scarf','Soft cotton scarf with versatile styling for casual outfits.',890.00,46,'FR-2102',4,'whitesboot.jpeg','2026-05-26 18:40:00',NULL),(103,'Black Finger Heart T-Shirt','Free-sized graphic tee with a relaxed fit and soft cotton feel.',1490.00,47,'FR-2103',4,'shoes.jpg','2026-05-26 19:00:00',NULL),(104,'Traditional Shawl','Elegant shawl for cultural outfits, ceremonies, and cool evenings.',1890.00,48,'FR-2104',4,'florencia-simonini-yhk8ZidU-K4-unsplash.jpg','2026-05-26 19:20:00',NULL),(105,'Round Metal Sunglasses','Classic round sunglasses with a light frame and tinted lenses.',1590.00,49,'FR-2105',4,'cap.jpeg','2026-05-26 19:40:00',NULL),(106,'Travel Duffel Bag','Spacious travel bag with sturdy handles and practical compartments.',2790.00,50,'FR-2106',4,'hankie.webp','2026-05-26 20:00:00',NULL),(107,'Minimal Canvas Shoes','Everyday canvas shoes with a clean profile and flexible sole.',1990.00,18,'FR-2107',4,'sunglass1.jpg','2026-05-26 20:20:00',NULL),(108,'White Winter Boots','Warm white boots with a plush lining and sturdy sole.',3290.00,19,'FR-2108',4,'T-shirtblack.jpg','2026-05-26 20:40:00',NULL),(109,'Soft Handkerchief Pack','Reusable soft handkerchief pack for daily carry.',490.00,17,'FR-2109',4,'traditionalclothes.jpg','2026-05-26 21:00:00',NULL),(110,'Festival Topi And Shawl Set','Traditional accessory set suitable for ceremonies and cultural events.',1690.00,18,'FR-2110',4,'whitesboot.jpeg','2026-05-26 21:20:00',NULL),(111,'Everyday Crossbody Bag','Compact crossbody bag with adjustable strap and secure pockets.',2190.00,21,'FR-2111',4,'shoes.jpg','2026-05-26 21:40:00',NULL);
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_ratings`
+--
+
+DROP TABLE IF EXISTS `product_ratings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_ratings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `rating` int NOT NULL,
+  `review` text COLLATE utf8mb4_general_ci,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `product_ratings_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `product_ratings_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `product_ratings_chk_1` CHECK ((`rating` between 1 and 5))
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_ratings`
+--
+
+LOCK TABLES `product_ratings` WRITE;
+/*!40000 ALTER TABLE `product_ratings` DISABLE KEYS */;
+INSERT INTO `product_ratings` VALUES (1,8,7,5,'I just loved this product this is the best gown thank you E clothing team','2025-06-26 15:26:53',NULL),(2,38,10,5,'tgg','2026-05-27 17:57:35',NULL);
+/*!40000 ALTER TABLE `product_ratings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `productdetail`
+--
+
+DROP TABLE IF EXISTS `productdetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productdetail` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int DEFAULT NULL,
+  `variation_key` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `variation_value` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `variant_sku` varchar(120) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `price_adjustment` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `quantity` int NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `productdetail_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=435 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productdetail`
+--
+
+LOCK TABLES `productdetail` WRITE;
+/*!40000 ALTER TABLE `productdetail` DISABLE KEYS */;
+INSERT INTO `productdetail` VALUES (1,41,'Size','S','ME-1000-S',0.00,6,'2026-05-28 00:19:47',NULL),(2,41,'Size','M','ME-1000-M',0.00,8,'2026-05-28 00:19:47',NULL),(3,41,'Size','L','ME-1000-L',150.00,7,'2026-05-28 00:19:47',NULL),(4,41,'Color','Black','ME-1000-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(5,41,'Color','Navy','ME-1000-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(6,41,'Color','Maroon','ME-1000-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(7,42,'Size','S','ME-1001-S',0.00,6,'2026-05-28 00:19:47',NULL),(8,42,'Size','M','ME-1001-M',0.00,8,'2026-05-28 00:19:47',NULL),(9,42,'Size','L','ME-1001-L',150.00,7,'2026-05-28 00:19:47',NULL),(10,42,'Color','Black','ME-1001-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(11,42,'Color','Navy','ME-1001-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(12,42,'Color','Maroon','ME-1001-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(13,43,'Size','S','ME-1002-S',0.00,6,'2026-05-28 00:19:47',NULL),(14,43,'Size','M','ME-1002-M',0.00,8,'2026-05-28 00:19:47',NULL),(15,43,'Size','L','ME-1002-L',150.00,7,'2026-05-28 00:19:47',NULL),(16,43,'Color','Black','ME-1002-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(17,43,'Color','Navy','ME-1002-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(18,43,'Color','Maroon','ME-1002-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(19,44,'Size','S','ME-1003-S',0.00,6,'2026-05-28 00:19:47',NULL),(20,44,'Size','M','ME-1003-M',0.00,8,'2026-05-28 00:19:47',NULL),(21,44,'Size','L','ME-1003-L',150.00,7,'2026-05-28 00:19:47',NULL),(22,44,'Color','Black','ME-1003-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(23,44,'Color','Navy','ME-1003-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(24,44,'Color','Maroon','ME-1003-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(25,45,'Size','S','ME-1004-S',0.00,6,'2026-05-28 00:19:47',NULL),(26,45,'Size','M','ME-1004-M',0.00,8,'2026-05-28 00:19:47',NULL),(27,45,'Size','L','ME-1004-L',150.00,7,'2026-05-28 00:19:47',NULL),(28,45,'Color','Black','ME-1004-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(29,45,'Color','Navy','ME-1004-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(30,45,'Color','Maroon','ME-1004-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(31,46,'Size','S','ME-1005-S',0.00,6,'2026-05-28 00:19:47',NULL),(32,46,'Size','M','ME-1005-M',0.00,8,'2026-05-28 00:19:47',NULL),(33,46,'Size','L','ME-1005-L',150.00,7,'2026-05-28 00:19:47',NULL),(34,46,'Color','Black','ME-1005-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(35,46,'Color','Navy','ME-1005-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(36,46,'Color','Maroon','ME-1005-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(37,47,'Size','S','ME-1006-S',0.00,6,'2026-05-28 00:19:47',NULL),(38,47,'Size','M','ME-1006-M',0.00,8,'2026-05-28 00:19:47',NULL),(39,47,'Size','L','ME-1006-L',150.00,7,'2026-05-28 00:19:47',NULL),(40,47,'Color','Black','ME-1006-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(41,47,'Color','Navy','ME-1006-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(42,47,'Color','Maroon','ME-1006-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(43,48,'Size','S','ME-1007-S',0.00,6,'2026-05-28 00:19:47',NULL),(44,48,'Size','M','ME-1007-M',0.00,8,'2026-05-28 00:19:47',NULL),(45,48,'Size','L','ME-1007-L',150.00,7,'2026-05-28 00:19:47',NULL),(46,48,'Color','Black','ME-1007-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(47,48,'Color','Navy','ME-1007-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(48,48,'Color','Maroon','ME-1007-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(49,49,'Size','S','ME-1008-S',0.00,6,'2026-05-28 00:19:47',NULL),(50,49,'Size','M','ME-1008-M',0.00,8,'2026-05-28 00:19:47',NULL),(51,49,'Size','L','ME-1008-L',150.00,7,'2026-05-28 00:19:47',NULL),(52,49,'Color','Black','ME-1008-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(53,49,'Color','Navy','ME-1008-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(54,49,'Color','Maroon','ME-1008-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(55,50,'Size','S','ME-1009-S',0.00,6,'2026-05-28 00:19:47',NULL),(56,50,'Size','M','ME-1009-M',0.00,8,'2026-05-28 00:19:47',NULL),(57,50,'Size','L','ME-1009-L',150.00,7,'2026-05-28 00:19:47',NULL),(58,50,'Color','Black','ME-1009-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(59,50,'Color','Navy','ME-1009-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(60,50,'Color','Maroon','ME-1009-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(61,51,'Size','S','ME-1010-S',0.00,6,'2026-05-28 00:19:47',NULL),(62,51,'Size','M','ME-1010-M',0.00,8,'2026-05-28 00:19:47',NULL),(63,51,'Size','L','ME-1010-L',150.00,7,'2026-05-28 00:19:47',NULL),(64,51,'Color','Black','ME-1010-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(65,51,'Color','Navy','ME-1010-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(66,51,'Color','Maroon','ME-1010-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(67,52,'Size','S','ME-1011-S',0.00,6,'2026-05-28 00:19:47',NULL),(68,52,'Size','M','ME-1011-M',0.00,8,'2026-05-28 00:19:47',NULL),(69,52,'Size','L','ME-1011-L',150.00,7,'2026-05-28 00:19:47',NULL),(70,52,'Color','Black','ME-1011-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(71,52,'Color','Navy','ME-1011-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(72,52,'Color','Maroon','ME-1011-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(73,53,'Size','S','ME-1012-S',0.00,6,'2026-05-28 00:19:47',NULL),(74,53,'Size','M','ME-1012-M',0.00,8,'2026-05-28 00:19:47',NULL),(75,53,'Size','L','ME-1012-L',150.00,7,'2026-05-28 00:19:47',NULL),(76,53,'Color','Black','ME-1012-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(77,53,'Color','Navy','ME-1012-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(78,53,'Color','Maroon','ME-1012-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(79,54,'Size','S','ME-1013-S',0.00,6,'2026-05-28 00:19:47',NULL),(80,54,'Size','M','ME-1013-M',0.00,8,'2026-05-28 00:19:47',NULL),(81,54,'Size','L','ME-1013-L',150.00,7,'2026-05-28 00:19:47',NULL),(82,54,'Color','Black','ME-1013-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(83,54,'Color','Navy','ME-1013-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(84,54,'Color','Maroon','ME-1013-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(85,55,'Size','S','ME-1014-S',0.00,6,'2026-05-28 00:19:47',NULL),(86,55,'Size','M','ME-1014-M',0.00,8,'2026-05-28 00:19:47',NULL),(87,55,'Size','L','ME-1014-L',150.00,7,'2026-05-28 00:19:47',NULL),(88,55,'Color','Black','ME-1014-BLK',0.00,5,'2026-05-28 00:19:47',NULL),(89,55,'Color','Navy','ME-1014-NVY',0.00,5,'2026-05-28 00:19:47',NULL),(90,55,'Color','Maroon','ME-1014-MRN',120.00,4,'2026-05-28 00:19:47',NULL),(91,56,'Size','S','ME-1015-S',0.00,6,'2026-05-28 00:19:48',NULL),(92,56,'Size','M','ME-1015-M',0.00,8,'2026-05-28 00:19:48',NULL),(93,56,'Size','L','ME-1015-L',150.00,7,'2026-05-28 00:19:48',NULL),(94,56,'Color','Black','ME-1015-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(95,56,'Color','Navy','ME-1015-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(96,56,'Color','Maroon','ME-1015-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(97,57,'Size','S','ME-1016-S',0.00,6,'2026-05-28 00:19:48',NULL),(98,57,'Size','M','ME-1016-M',0.00,8,'2026-05-28 00:19:48',NULL),(99,57,'Size','L','ME-1016-L',150.00,7,'2026-05-28 00:19:48',NULL),(100,57,'Color','Black','ME-1016-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(101,57,'Color','Navy','ME-1016-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(102,57,'Color','Maroon','ME-1016-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(103,58,'Size','S','ME-1017-S',0.00,6,'2026-05-28 00:19:48',NULL),(104,58,'Size','M','ME-1017-M',0.00,8,'2026-05-28 00:19:48',NULL),(105,58,'Size','L','ME-1017-L',150.00,7,'2026-05-28 00:19:48',NULL),(106,58,'Color','Black','ME-1017-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(107,58,'Color','Navy','ME-1017-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(108,58,'Color','Maroon','ME-1017-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(109,59,'Size','S','ME-1018-S',0.00,6,'2026-05-28 00:19:48',NULL),(110,59,'Size','M','ME-1018-M',0.00,8,'2026-05-28 00:19:48',NULL),(111,59,'Size','L','ME-1018-L',150.00,7,'2026-05-28 00:19:48',NULL),(112,59,'Color','Black','ME-1018-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(113,59,'Color','Navy','ME-1018-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(114,59,'Color','Maroon','ME-1018-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(115,60,'Size','S','ME-1019-S',0.00,6,'2026-05-28 00:19:48',NULL),(116,60,'Size','M','ME-1019-M',0.00,8,'2026-05-28 00:19:48',NULL),(117,60,'Size','L','ME-1019-L',150.00,7,'2026-05-28 00:19:48',NULL),(118,60,'Color','Black','ME-1019-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(119,60,'Color','Navy','ME-1019-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(120,60,'Color','Maroon','ME-1019-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(121,61,'Size','S','WO-1020-S',0.00,6,'2026-05-28 00:19:48',NULL),(122,61,'Size','M','WO-1020-M',0.00,8,'2026-05-28 00:19:48',NULL),(123,61,'Size','L','WO-1020-L',150.00,7,'2026-05-28 00:19:48',NULL),(124,61,'Color','Black','WO-1020-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(125,61,'Color','Navy','WO-1020-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(126,61,'Color','Maroon','WO-1020-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(127,62,'Size','S','WO-1021-S',0.00,6,'2026-05-28 00:19:48',NULL),(128,62,'Size','M','WO-1021-M',0.00,8,'2026-05-28 00:19:48',NULL),(129,62,'Size','L','WO-1021-L',150.00,7,'2026-05-28 00:19:48',NULL),(130,62,'Color','Black','WO-1021-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(131,62,'Color','Navy','WO-1021-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(132,62,'Color','Maroon','WO-1021-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(133,63,'Size','S','WO-1022-S',0.00,6,'2026-05-28 00:19:48',NULL),(134,63,'Size','M','WO-1022-M',0.00,8,'2026-05-28 00:19:48',NULL),(135,63,'Size','L','WO-1022-L',150.00,7,'2026-05-28 00:19:48',NULL),(136,63,'Color','Black','WO-1022-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(137,63,'Color','Navy','WO-1022-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(138,63,'Color','Maroon','WO-1022-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(139,64,'Size','S','WO-1023-S',0.00,6,'2026-05-28 00:19:48',NULL),(140,64,'Size','M','WO-1023-M',0.00,8,'2026-05-28 00:19:48',NULL),(141,64,'Size','L','WO-1023-L',150.00,7,'2026-05-28 00:19:48',NULL),(142,64,'Color','Black','WO-1023-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(143,64,'Color','Navy','WO-1023-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(144,64,'Color','Maroon','WO-1023-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(145,65,'Size','S','WO-1024-S',0.00,6,'2026-05-28 00:19:48',NULL),(146,65,'Size','M','WO-1024-M',0.00,8,'2026-05-28 00:19:48',NULL),(147,65,'Size','L','WO-1024-L',150.00,7,'2026-05-28 00:19:48',NULL),(148,65,'Color','Black','WO-1024-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(149,65,'Color','Navy','WO-1024-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(150,65,'Color','Maroon','WO-1024-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(151,66,'Size','S','WO-1025-S',0.00,6,'2026-05-28 00:19:48',NULL),(152,66,'Size','M','WO-1025-M',0.00,8,'2026-05-28 00:19:48',NULL),(153,66,'Size','L','WO-1025-L',150.00,7,'2026-05-28 00:19:48',NULL),(154,66,'Color','Black','WO-1025-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(155,66,'Color','Navy','WO-1025-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(156,66,'Color','Maroon','WO-1025-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(157,67,'Size','S','WO-1026-S',0.00,6,'2026-05-28 00:19:48',NULL),(158,67,'Size','M','WO-1026-M',0.00,8,'2026-05-28 00:19:48',NULL),(159,67,'Size','L','WO-1026-L',150.00,7,'2026-05-28 00:19:48',NULL),(160,67,'Color','Black','WO-1026-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(161,67,'Color','Navy','WO-1026-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(162,67,'Color','Maroon','WO-1026-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(163,68,'Size','S','WO-1027-S',0.00,6,'2026-05-28 00:19:48',NULL),(164,68,'Size','M','WO-1027-M',0.00,8,'2026-05-28 00:19:48',NULL),(165,68,'Size','L','WO-1027-L',150.00,7,'2026-05-28 00:19:48',NULL),(166,68,'Color','Black','WO-1027-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(167,68,'Color','Navy','WO-1027-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(168,68,'Color','Maroon','WO-1027-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(169,69,'Size','S','WO-1028-S',0.00,6,'2026-05-28 00:19:48',NULL),(170,69,'Size','M','WO-1028-M',0.00,8,'2026-05-28 00:19:48',NULL),(171,69,'Size','L','WO-1028-L',150.00,7,'2026-05-28 00:19:48',NULL),(172,69,'Color','Black','WO-1028-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(173,69,'Color','Navy','WO-1028-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(174,69,'Color','Maroon','WO-1028-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(175,70,'Size','S','WO-1029-S',0.00,6,'2026-05-28 00:19:48',NULL),(176,70,'Size','M','WO-1029-M',0.00,8,'2026-05-28 00:19:48',NULL),(177,70,'Size','L','WO-1029-L',150.00,7,'2026-05-28 00:19:48',NULL),(178,70,'Color','Black','WO-1029-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(179,70,'Color','Navy','WO-1029-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(180,70,'Color','Maroon','WO-1029-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(181,71,'Size','S','WO-1030-S',0.00,6,'2026-05-28 00:19:48',NULL),(182,71,'Size','M','WO-1030-M',0.00,8,'2026-05-28 00:19:48',NULL),(183,71,'Size','L','WO-1030-L',150.00,7,'2026-05-28 00:19:48',NULL),(184,71,'Color','Black','WO-1030-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(185,71,'Color','Navy','WO-1030-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(186,71,'Color','Maroon','WO-1030-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(187,72,'Size','S','WO-1031-S',0.00,6,'2026-05-28 00:19:48',NULL),(188,72,'Size','M','WO-1031-M',0.00,8,'2026-05-28 00:19:48',NULL),(189,72,'Size','L','WO-1031-L',150.00,7,'2026-05-28 00:19:48',NULL),(190,72,'Color','Black','WO-1031-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(191,72,'Color','Navy','WO-1031-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(192,72,'Color','Maroon','WO-1031-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(193,73,'Size','S','WO-1032-S',0.00,6,'2026-05-28 00:19:48',NULL),(194,73,'Size','M','WO-1032-M',0.00,8,'2026-05-28 00:19:48',NULL),(195,73,'Size','L','WO-1032-L',150.00,7,'2026-05-28 00:19:48',NULL),(196,73,'Color','Black','WO-1032-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(197,73,'Color','Navy','WO-1032-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(198,73,'Color','Maroon','WO-1032-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(199,74,'Size','S','WO-1033-S',0.00,6,'2026-05-28 00:19:48',NULL),(200,74,'Size','M','WO-1033-M',0.00,8,'2026-05-28 00:19:48',NULL),(201,74,'Size','L','WO-1033-L',150.00,7,'2026-05-28 00:19:48',NULL),(202,74,'Color','Black','WO-1033-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(203,74,'Color','Navy','WO-1033-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(204,74,'Color','Maroon','WO-1033-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(205,75,'Size','S','WO-1034-S',0.00,6,'2026-05-28 00:19:48',NULL),(206,75,'Size','M','WO-1034-M',0.00,8,'2026-05-28 00:19:48',NULL),(207,75,'Size','L','WO-1034-L',150.00,7,'2026-05-28 00:19:48',NULL),(208,75,'Color','Black','WO-1034-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(209,75,'Color','Navy','WO-1034-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(210,75,'Color','Maroon','WO-1034-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(211,76,'Size','S','WO-1035-S',0.00,6,'2026-05-28 00:19:48',NULL),(212,76,'Size','M','WO-1035-M',0.00,8,'2026-05-28 00:19:48',NULL),(213,76,'Size','L','WO-1035-L',150.00,7,'2026-05-28 00:19:48',NULL),(214,76,'Color','Black','WO-1035-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(215,76,'Color','Navy','WO-1035-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(216,76,'Color','Maroon','WO-1035-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(217,77,'Size','S','WO-1036-S',0.00,6,'2026-05-28 00:19:48',NULL),(218,77,'Size','M','WO-1036-M',0.00,8,'2026-05-28 00:19:48',NULL),(219,77,'Size','L','WO-1036-L',150.00,7,'2026-05-28 00:19:48',NULL),(220,77,'Color','Black','WO-1036-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(221,77,'Color','Navy','WO-1036-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(222,77,'Color','Maroon','WO-1036-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(223,78,'Size','S','WO-1037-S',0.00,6,'2026-05-28 00:19:48',NULL),(224,78,'Size','M','WO-1037-M',0.00,8,'2026-05-28 00:19:48',NULL),(225,78,'Size','L','WO-1037-L',150.00,7,'2026-05-28 00:19:48',NULL),(226,78,'Color','Black','WO-1037-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(227,78,'Color','Navy','WO-1037-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(228,78,'Color','Maroon','WO-1037-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(229,79,'Size','S','WO-1038-S',0.00,6,'2026-05-28 00:19:48',NULL),(230,79,'Size','M','WO-1038-M',0.00,8,'2026-05-28 00:19:48',NULL),(231,79,'Size','L','WO-1038-L',150.00,7,'2026-05-28 00:19:48',NULL),(232,79,'Color','Black','WO-1038-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(233,79,'Color','Navy','WO-1038-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(234,79,'Color','Maroon','WO-1038-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(235,80,'Size','S','WO-1039-S',0.00,6,'2026-05-28 00:19:48',NULL),(236,80,'Size','M','WO-1039-M',0.00,8,'2026-05-28 00:19:48',NULL),(237,80,'Size','L','WO-1039-L',150.00,7,'2026-05-28 00:19:48',NULL),(238,80,'Color','Black','WO-1039-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(239,80,'Color','Navy','WO-1039-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(240,80,'Color','Maroon','WO-1039-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(241,81,'Size','S','BA-1040-S',0.00,6,'2026-05-28 00:19:48',NULL),(242,81,'Size','M','BA-1040-M',0.00,8,'2026-05-28 00:19:48',NULL),(243,81,'Size','L','BA-1040-L',150.00,7,'2026-05-28 00:19:48',NULL),(244,81,'Color','Black','BA-1040-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(245,81,'Color','Navy','BA-1040-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(246,81,'Color','Maroon','BA-1040-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(247,82,'Size','S','BA-1041-S',0.00,6,'2026-05-28 00:19:48',NULL),(248,82,'Size','M','BA-1041-M',0.00,8,'2026-05-28 00:19:48',NULL),(249,82,'Size','L','BA-1041-L',150.00,7,'2026-05-28 00:19:48',NULL),(250,82,'Color','Black','BA-1041-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(251,82,'Color','Navy','BA-1041-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(252,82,'Color','Maroon','BA-1041-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(253,83,'Size','S','BA-1042-S',0.00,6,'2026-05-28 00:19:48',NULL),(254,83,'Size','M','BA-1042-M',0.00,8,'2026-05-28 00:19:48',NULL),(255,83,'Size','L','BA-1042-L',150.00,7,'2026-05-28 00:19:48',NULL),(256,83,'Color','Black','BA-1042-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(257,83,'Color','Navy','BA-1042-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(258,83,'Color','Maroon','BA-1042-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(259,84,'Size','S','BA-1043-S',0.00,6,'2026-05-28 00:19:48',NULL),(260,84,'Size','M','BA-1043-M',0.00,8,'2026-05-28 00:19:48',NULL),(261,84,'Size','L','BA-1043-L',150.00,7,'2026-05-28 00:19:48',NULL),(262,84,'Color','Black','BA-1043-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(263,84,'Color','Navy','BA-1043-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(264,84,'Color','Maroon','BA-1043-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(265,85,'Size','S','BA-1044-S',0.00,6,'2026-05-28 00:19:48',NULL),(266,85,'Size','M','BA-1044-M',0.00,8,'2026-05-28 00:19:48',NULL),(267,85,'Size','L','BA-1044-L',150.00,7,'2026-05-28 00:19:48',NULL),(268,85,'Color','Black','BA-1044-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(269,85,'Color','Navy','BA-1044-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(270,85,'Color','Maroon','BA-1044-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(271,86,'Size','S','BA-1045-S',0.00,6,'2026-05-28 00:19:48',NULL),(272,86,'Size','M','BA-1045-M',0.00,8,'2026-05-28 00:19:48',NULL),(273,86,'Size','L','BA-1045-L',150.00,7,'2026-05-28 00:19:48',NULL),(274,86,'Color','Black','BA-1045-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(275,86,'Color','Navy','BA-1045-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(276,86,'Color','Maroon','BA-1045-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(277,87,'Size','S','BA-1046-S',0.00,6,'2026-05-28 00:19:48',NULL),(278,87,'Size','M','BA-1046-M',0.00,8,'2026-05-28 00:19:48',NULL),(279,87,'Size','L','BA-1046-L',150.00,7,'2026-05-28 00:19:48',NULL),(280,87,'Color','Black','BA-1046-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(281,87,'Color','Navy','BA-1046-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(282,87,'Color','Maroon','BA-1046-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(283,88,'Size','S','BA-1047-S',0.00,6,'2026-05-28 00:19:48',NULL),(284,88,'Size','M','BA-1047-M',0.00,8,'2026-05-28 00:19:48',NULL),(285,88,'Size','L','BA-1047-L',150.00,7,'2026-05-28 00:19:48',NULL),(286,88,'Color','Black','BA-1047-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(287,88,'Color','Navy','BA-1047-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(288,88,'Color','Maroon','BA-1047-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(289,89,'Size','S','BA-1048-S',0.00,6,'2026-05-28 00:19:48',NULL),(290,89,'Size','M','BA-1048-M',0.00,8,'2026-05-28 00:19:48',NULL),(291,89,'Size','L','BA-1048-L',150.00,7,'2026-05-28 00:19:48',NULL),(292,89,'Color','Black','BA-1048-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(293,89,'Color','Navy','BA-1048-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(294,89,'Color','Maroon','BA-1048-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(295,90,'Size','S','BA-1049-S',0.00,6,'2026-05-28 00:19:48',NULL),(296,90,'Size','M','BA-1049-M',0.00,8,'2026-05-28 00:19:48',NULL),(297,90,'Size','L','BA-1049-L',150.00,7,'2026-05-28 00:19:48',NULL),(298,90,'Color','Black','BA-1049-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(299,90,'Color','Navy','BA-1049-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(300,90,'Color','Maroon','BA-1049-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(301,91,'Size','S','BA-1050-S',0.00,6,'2026-05-28 00:19:48',NULL),(302,91,'Size','M','BA-1050-M',0.00,8,'2026-05-28 00:19:48',NULL),(303,91,'Size','L','BA-1050-L',150.00,7,'2026-05-28 00:19:48',NULL),(304,91,'Color','Black','BA-1050-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(305,91,'Color','Navy','BA-1050-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(306,91,'Color','Maroon','BA-1050-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(307,92,'Size','S','BA-1051-S',0.00,6,'2026-05-28 00:19:48',NULL),(308,92,'Size','M','BA-1051-M',0.00,8,'2026-05-28 00:19:48',NULL),(309,92,'Size','L','BA-1051-L',150.00,7,'2026-05-28 00:19:48',NULL),(310,92,'Color','Black','BA-1051-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(311,92,'Color','Navy','BA-1051-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(312,92,'Color','Maroon','BA-1051-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(313,93,'Size','S','BA-1052-S',0.00,6,'2026-05-28 00:19:48',NULL),(314,93,'Size','M','BA-1052-M',0.00,8,'2026-05-28 00:19:48',NULL),(315,93,'Size','L','BA-1052-L',150.00,7,'2026-05-28 00:19:48',NULL),(316,93,'Color','Black','BA-1052-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(317,93,'Color','Navy','BA-1052-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(318,93,'Color','Maroon','BA-1052-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(319,94,'Size','S','BA-1053-S',0.00,6,'2026-05-28 00:19:48',NULL),(320,94,'Size','M','BA-1053-M',0.00,8,'2026-05-28 00:19:48',NULL),(321,94,'Size','L','BA-1053-L',150.00,7,'2026-05-28 00:19:48',NULL),(322,94,'Color','Black','BA-1053-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(323,94,'Color','Navy','BA-1053-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(324,94,'Color','Maroon','BA-1053-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(325,95,'Size','S','BA-1054-S',0.00,6,'2026-05-28 00:19:48',NULL),(326,95,'Size','M','BA-1054-M',0.00,8,'2026-05-28 00:19:48',NULL),(327,95,'Size','L','BA-1054-L',150.00,7,'2026-05-28 00:19:48',NULL),(328,95,'Color','Black','BA-1054-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(329,95,'Color','Navy','BA-1054-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(330,95,'Color','Maroon','BA-1054-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(331,96,'Size','S','BA-1055-S',0.00,6,'2026-05-28 00:19:48',NULL),(332,96,'Size','M','BA-1055-M',0.00,8,'2026-05-28 00:19:48',NULL),(333,96,'Size','L','BA-1055-L',150.00,7,'2026-05-28 00:19:48',NULL),(334,96,'Color','Black','BA-1055-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(335,96,'Color','Navy','BA-1055-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(336,96,'Color','Maroon','BA-1055-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(337,97,'Size','S','BA-1056-S',0.00,6,'2026-05-28 00:19:48',NULL),(338,97,'Size','M','BA-1056-M',0.00,8,'2026-05-28 00:19:48',NULL),(339,97,'Size','L','BA-1056-L',150.00,7,'2026-05-28 00:19:48',NULL),(340,97,'Color','Black','BA-1056-BLK',0.00,5,'2026-05-28 00:19:48',NULL),(341,97,'Color','Navy','BA-1056-NVY',0.00,5,'2026-05-28 00:19:48',NULL),(342,97,'Color','Maroon','BA-1056-MRN',120.00,4,'2026-05-28 00:19:48',NULL),(343,98,'Size','S','BA-1057-S',0.00,6,'2026-05-28 00:19:49',NULL),(344,98,'Size','M','BA-1057-M',0.00,8,'2026-05-28 00:19:49',NULL),(345,98,'Size','L','BA-1057-L',150.00,7,'2026-05-28 00:19:49',NULL),(346,98,'Color','Black','BA-1057-BLK',0.00,5,'2026-05-28 00:19:49',NULL),(347,98,'Color','Navy','BA-1057-NVY',0.00,5,'2026-05-28 00:19:49',NULL),(348,98,'Color','Maroon','BA-1057-MRN',120.00,4,'2026-05-28 00:19:49',NULL),(349,99,'Size','S','BA-1058-S',0.00,6,'2026-05-28 00:19:49',NULL),(350,99,'Size','M','BA-1058-M',0.00,8,'2026-05-28 00:19:49',NULL),(351,99,'Size','L','BA-1058-L',150.00,7,'2026-05-28 00:19:49',NULL),(352,99,'Color','Black','BA-1058-BLK',0.00,5,'2026-05-28 00:19:49',NULL),(353,99,'Color','Navy','BA-1058-NVY',0.00,5,'2026-05-28 00:19:49',NULL),(354,99,'Color','Maroon','BA-1058-MRN',120.00,4,'2026-05-28 00:19:49',NULL),(355,100,'Size','S','BA-1059-S',0.00,6,'2026-05-28 00:19:49',NULL),(356,100,'Size','M','BA-1059-M',0.00,8,'2026-05-28 00:19:49',NULL),(357,100,'Size','L','BA-1059-L',150.00,7,'2026-05-28 00:19:49',NULL),(358,100,'Color','Black','BA-1059-BLK',0.00,5,'2026-05-28 00:19:49',NULL),(359,100,'Color','Navy','BA-1059-NVY',0.00,5,'2026-05-28 00:19:49',NULL),(360,100,'Color','Maroon','BA-1059-MRN',120.00,4,'2026-05-28 00:19:49',NULL),(361,101,'Fit','Free Size','FR-1060-FS',0.00,45,'2026-05-28 00:19:49',NULL),(362,102,'Fit','Free Size','FR-1061-FS',0.00,46,'2026-05-28 00:19:49',NULL),(363,103,'Fit','Free Size','FR-1062-FS',0.00,47,'2026-05-28 00:19:49',NULL),(364,104,'Fit','Free Size','FR-1063-FS',0.00,48,'2026-05-28 00:19:49',NULL),(365,105,'Fit','Free Size','FR-1064-FS',0.00,49,'2026-05-28 00:19:49',NULL),(366,106,'Fit','Free Size','FR-1065-FS',0.00,50,'2026-05-28 00:19:49',NULL),(367,107,'Fit','Free Size','FR-1066-FS',0.00,18,'2026-05-28 00:19:49',NULL),(368,108,'Fit','Free Size','FR-1067-FS',0.00,19,'2026-05-28 00:19:49',NULL),(369,109,'Fit','Free Size','FR-1068-FS',0.00,20,'2026-05-28 00:19:49',NULL),(370,110,'Fit','Free Size','FR-1069-FS',0.00,21,'2026-05-28 00:19:49',NULL),(371,111,'Fit','Free Size','FR-1070-FS',0.00,22,'2026-05-28 00:19:49',NULL),(372,1,'Fit','Free Size','BCS-001-234-FS',0.00,50,'2026-05-28 00:39:42',NULL),(373,2,'Fit','Free Size','CBT-002-023-FS',0.00,15,'2026-05-28 00:39:42',NULL),(374,3,'Fit','Free Size','BFM-003-232-FS',0.00,17,'2026-05-28 00:39:42',NULL),(375,4,'Fit','Free Size','KSB-083-393-FS',0.00,20,'2026-05-28 00:39:42',NULL),(376,5,'Fit','Free Size','BTM-003-323-FS',0.00,10,'2026-05-28 00:39:42',NULL),(377,6,'Fit','Free Size','WDW-394-494-FS',0.00,10,'2026-05-28 00:39:42',NULL),(378,7,'Fit','Free Size','BGS-939-393-FS',0.00,15,'2026-05-28 00:39:42',NULL),(379,8,'Fit','Free Size','BWG-983-903-FS',0.00,16,'2026-05-28 00:39:42',NULL),(380,9,'Fit','Free Size','CBB-033-293-FS',0.00,30,'2026-05-28 00:39:42',NULL),(381,10,'Fit','Free Size','CBW-039-932-FS',0.00,30,'2026-05-28 00:39:42',NULL),(382,11,'Fit','Free Size','TTD-038-393-FS',0.00,15,'2026-05-28 00:39:42',NULL),(383,12,'Fit','Free Size','PDB-980-382-FS',0.00,30,'2026-05-28 00:39:42',NULL),(384,13,'Fit','Free Size','SSB-032-393-FS',0.00,10,'2026-05-28 00:39:42',NULL),(385,14,'Fit','Free Size','NTPD-373-292-FS',0.00,10,'2026-05-28 00:39:42',NULL),(386,15,'Fit','Free Size','ABW-392-231-FS',0.00,35,'2026-05-28 00:39:42',NULL),(387,16,'Fit','Free Size','KHB-382-094-FS',0.00,38,'2026-05-28 00:39:42',NULL),(388,17,'Fit','Free Size','KSS-392-392-FS',0.00,30,'2026-05-28 00:39:42',NULL),(389,18,'Fit','Free Size','SKU-123-042-FS',0.00,30,'2026-05-28 00:39:42',NULL),(390,19,'Fit','Free Size','BSI-392-192-FS',0.00,20,'2026-05-28 00:39:42',NULL),(391,20,'Fit','Free Size','GCS-392-032-FS',0.00,30,'2026-05-28 00:39:42',NULL),(392,21,'Fit','Free Size','DPD-382-392-FS',0.00,30,'2026-05-28 00:39:42',NULL),(393,22,'Fit','Free Size','LDG-392-382-FS',0.00,30,'2026-05-28 00:39:42',NULL),(394,23,'Fit','Free Size','HTAB-398-182-FS',0.00,30,'2026-05-28 00:39:42',NULL),(395,24,'Fit','Free Size','TSFS-378-338-FS',0.00,19,'2026-05-28 00:39:42',NULL),(396,25,'Fit','Free Size','BSN-292-020-FS',0.00,30,'2026-05-28 00:39:42',NULL),(397,26,'Fit','Free Size','CBKS-302-392-FS',0.00,40,'2026-05-28 00:39:42',NULL),(398,27,'Fit','Free Size','WDW-394-028-FS',0.00,28,'2026-05-28 00:39:42',NULL),(399,28,'Fit','Free Size','CFM-439-392-FS',0.00,20,'2026-05-28 00:39:42',NULL),(400,29,'Fit','Free Size','HBE-392-492-FS',0.00,30,'2026-05-28 00:39:42',NULL),(401,30,'Fit','Free Size','SYU-382-937-FS',0.00,20,'2026-05-28 00:39:42',NULL),(402,31,'Fit','Free Size','SBW-203-392-FS',0.00,30,'2026-05-28 00:39:42',NULL),(403,32,'Fit','Free Size','CTS-382-856-FS',0.00,30,'2026-05-28 00:39:42',NULL),(404,33,'Fit','Free Size','SFM-534-547-FS',0.00,19,'2026-05-28 00:39:42',NULL),(405,34,'Fit','Free Size','SHY-584-463-FS',0.00,30,'2026-05-28 00:39:42',NULL),(406,35,'Fit','Free Size','CWT-484-383-FS',0.00,40,'2026-05-28 00:39:42',NULL),(407,36,'Fit','Free Size','LJU-494-594-FS',0.00,50,'2026-05-28 00:39:42',NULL),(408,37,'Fit','Free Size','NAF-495-945-FS',0.00,39,'2026-05-28 00:39:42',NULL),(409,38,'Fit','Free Size','BLR-485-665-FS',0.00,40,'2026-05-28 00:39:42',NULL),(410,39,'Fit','Free Size','BJS-493-594-FS',0.00,50,'2026-05-28 00:39:42',NULL);
+/*!40000 ALTER TABLE `productdetail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shipping`
+--
+
+DROP TABLE IF EXISTS `shipping`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shipping` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int DEFAULT NULL,
+  `billing_address` text COLLATE utf8mb4_general_ci NOT NULL,
+  `shipping_address` text COLLATE utf8mb4_general_ci NOT NULL,
+  `mobile` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `shipping_lat` decimal(10,6) DEFAULT NULL,
+  `shipping_lng` decimal(10,6) DEFAULT NULL,
+  `shipping_location_details` text COLLATE utf8mb4_general_ci,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  CONSTRAINT `shipping_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shipping`
+--
+
+LOCK TABLES `shipping` WRITE;
+/*!40000 ALTER TABLE `shipping` DISABLE KEYS */;
+INSERT INTO `shipping` VALUES (1,1,'Dhangadhi','Dhabgadhi',NULL,'roshan.negi@example.com',NULL,NULL,NULL,'2026-05-27 11:20:00',NULL),(2,2,'Attriya','Attriya',NULL,'prakash.bhatt2@example.com',NULL,NULL,NULL,'2026-05-27 11:40:00',NULL),(3,3,'Dhangadhi','Jhalari',NULL,'dinesh.phulara2@example.com',NULL,NULL,NULL,'2026-05-27 12:00:00',NULL),(4,4,'Mnr','Jhalari',NULL,'dinesh.phulara2@example.com',NULL,NULL,NULL,'2026-05-27 12:20:00',NULL),(5,5,'Dhangadhi','Jhalari',NULL,'dinesh.phulara2@example.com',NULL,NULL,NULL,'2026-05-27 12:40:00',NULL),(6,6,'gg','gg',NULL,'nabin.koirala@example.com',NULL,NULL,NULL,'2026-05-27 13:00:00',NULL),(7,7,'gg','gg',NULL,'nabin.koirala@example.com',NULL,NULL,NULL,'2026-05-27 13:20:00',NULL),(8,8,'gg','gg',NULL,'nabin.koirala2@example.com',NULL,NULL,NULL,'2026-05-27 13:40:00',NULL),(9,9,'gg','gg',NULL,'nabin.koirala2@example.com',NULL,NULL,NULL,'2026-05-28 00:17:42',NULL),(10,10,'Dhangadhi, Nepal','Dhangadhi, Kailali, Nepal',NULL,'roshan.negi@example.com',NULL,NULL,NULL,'2026-05-28 10:40:00',NULL),(11,11,'Dhangadhi, Kailali, Nepal','Dhangadhi, Kailali, Nepal',NULL,'roshan.negi@example.com',NULL,NULL,NULL,'2026-05-28 00:22:43',NULL),(12,12,'gg','gg',NULL,'nabin.koirala2@example.com',NULL,NULL,NULL,'2026-05-28 00:26:00',NULL),(13,13,'ggg','ggg',NULL,'nabin.koirala2@example.com',NULL,NULL,NULL,'2026-05-28 00:35:07',NULL),(14,14,'gg','gg','9845457845','nabin.koirala2@example.com',NULL,NULL,NULL,'2026-05-28 00:37:27',NULL),(15,15,'Dhangadhi, Kailali, Nepal','Dhangadhi, Kailali, Nepal','9806478012','roshan.negi@example.com',NULL,NULL,NULL,'2026-05-28 00:38:07',NULL),(16,16,'Dhangadhi, Kailali, Nepal','Dhangadhi, Kailali, Nepal','9806478012','roshan.negi@example.com',NULL,NULL,NULL,'2026-05-28 00:38:23',NULL),(17,18,'Dhangadhi, Kailali, Sudurpashchim Province, Nepal','Dhangadhi, Kailali, Sudurpashchim Province, Nepal','9806478012','roshan.negi@example.com',28.704100,80.590400,NULL,'2026-05-28 00:43:00',NULL),(18,19,'Main Road, Dhangadhi, Kailali, Sudurpashchim Province, ZIP/Postal code 10900, Nepal','Main Road, Dhangadhi, Kailali, Sudurpashchim Province, ZIP/Postal code 10900, Nepal','9806478012','roshan.negi@example.com',28.704100,80.590400,'Location name: Main Road | Street/Road: Main Road | Area: Dhangadhi | City/Town: Dhangadhi | District: Kailali | Province/State: Sudurpashchim Province | ZIP/Postal code: 10900 | Country: Nepal | Latitude: 28.704100 | Longitude: 80.590400','2026-05-28 00:47:35',NULL),(19,20,'Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal','Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal','9845457845','ffdpnepal@gmail.com',28.972725,80.170149,'Location name: Bhimdatta | Street/Road: Not available | Area: Not available | City/Town: Bhimdatta | District: Kanchanpur District | Province/State: Sudurpashchim Province | ZIP/Postal code: 10400 | Country: Nepal | Latitude: 28.972725 | Longitude: 80.170149','2026-05-28 00:53:54',NULL),(20,21,'Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal','Bhimdatta, Kanchanpur District, Sudurpashchim Province, ZIP/Postal code 10400, Nepal','9876543210','gg@gg.com',28.975745,80.192975,'Location name: Bhimdatta | Street/Road: Not available | Area: Not available | City/Town: Bhimdatta | District: Kanchanpur District | Province/State: Sudurpashchim Province | ZIP/Postal code: 10400 | Country: Nepal | Latitude: 28.975745 | Longitude: 80.192975','2026-05-28 01:03:21',NULL),(21,22,'Patasi Store, 2nd floor Watu Marg, Makkhan, Kathmandu Metropolitan City, Kathmandu, Bagamati Province, ZIP/Postal code 44066, Nepal','Patasi Store, 2nd floor Watu Marg, Makkhan, Kathmandu Metropolitan City, Kathmandu, Bagamati Province, ZIP/Postal code 44066, Nepal','9876543210','gg@gg.com',27.705705,85.311527,'Location name: Patasi Store | Street/Road: 2nd floor Watu Marg | Area: Makkhan | City/Town: Kathmandu Metropolitan City | District: Kathmandu | Province/State: Bagamati Province | ZIP/Postal code: 44066 | Country: Nepal | Latitude: 27.705705 | Longitude: 85.311527','2026-05-28 01:14:07',NULL),(22,23,'Umit Loundary, 7th Street, Shiva Marga, Baidam, Pokhara, Kaski, Gandaki Province, ZIP/Postal code 00799, Nepal','Umit Loundary, 7th Street, Shiva Marga, Baidam, Pokhara, Kaski, Gandaki Province, ZIP/Postal code 00799, Nepal','9845457845','gg@gg.com',28.208157,83.962870,'Location name: Umit Loundary | Street/Road: 7th Street, Shiva Marga | Area: Baidam | City/Town: Pokhara | District: Kaski | Province/State: Gandaki Province | ZIP/Postal code: 00799 | Country: Nepal | Latitude: 28.208157 | Longitude: 83.962870','2026-05-28 01:21:33',NULL);
+/*!40000 ALTER TABLE `shipping` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `smtp_settings`
+--
+
+DROP TABLE IF EXISTS `smtp_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `smtp_settings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `host` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `port` int NOT NULL DEFAULT '587',
+  `username` varchar(255) COLLATE utf8mb4_general_ci DEFAULT '',
+  `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT '',
+  `encryption` varchar(20) COLLATE utf8mb4_general_ci DEFAULT 'tls',
+  `from_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'help@example.com',
+  `from_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'E-Clothing Store',
+  `admin_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'help@example.com',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `smtp_settings`
+--
+
+LOCK TABLES `smtp_settings` WRITE;
+/*!40000 ALTER TABLE `smtp_settings` DISABLE KEYS */;
+INSERT INTO `smtp_settings` VALUES (1,'sandbox.smtp.mailtrap.io',2525,'16419e58453544','37e11ef18c6f9f','','help@example.com','E-Clothing Store','help@example.com',1,'2026-05-27 23:09:20','2026-05-27 23:09:20');
+/*!40000 ALTER TABLE `smtp_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `store_pages`
+--
+
+DROP TABLE IF EXISTS `store_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `store_pages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `slug` varchar(120) COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(180) COLLATE utf8mb4_general_ci NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_general_ci NOT NULL,
+  `footer_group` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'shop',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_store_page_slug` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `store_pages`
+--
+
+LOCK TABLES `store_pages` WRITE;
+/*!40000 ALTER TABLE `store_pages` DISABLE KEYS */;
+INSERT INTO `store_pages` VALUES (1,'about-us','About Us','E-Clothing Store brings quality fashion, reliable service, and practical everyday style to customers across Nepal.','shop',1,1,'2026-05-28 00:13:56'),(2,'privacy-policy','Privacy Policy','We collect only the information needed to process orders, support customers, and improve the shopping experience.','shop',2,1,'2026-05-28 00:13:56'),(3,'terms-condition','Terms & Condition','By using this store, customers agree to provide accurate order details and follow our purchase, delivery, and return policies.','shop',3,1,'2026-05-28 00:13:56'),(4,'return-policy','Return Policy','Eligible products can be requested for return within 30 days when unused, undamaged, and returned with original packaging.','shop',4,1,'2026-05-28 00:13:56'),(5,'faqs-help','FAQs & Help','For order, delivery, or product questions, contact help@example.com or call our support number during business hours.','shop',5,1,'2026-05-28 00:13:56');
+/*!40000 ALTER TABLE `store_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `store_settings`
+--
+
+DROP TABLE IF EXISTS `store_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `store_settings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `store_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `store_logo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_number` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `store_email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `store_address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `store_information` text COLLATE utf8mb4_general_ci,
+  `established_date` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `currency_code` varchar(10) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'NPR',
+  `currency_symbol` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Rs',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `store_settings`
+--
+
+LOCK TABLES `store_settings` WRITE;
+/*!40000 ALTER TABLE `store_settings` DISABLE KEYS */;
+INSERT INTO `store_settings` VALUES (1,'E-Clothing Store','groupdiscuss.png','+9779806478012','help@example.com','Dhangadhi, Kailali Nepal','Welcome to E-Clothing Store — your trusted destination for stylish, high-quality, and affordable fashion. We are committed to bringing you the latest trends with comfort and elegance. Shop with confidence and express your unique style with us!','2026-07-01','NPR','Rs');
+/*!40000 ALTER TABLE `store_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_contact`
+--
+
+DROP TABLE IF EXISTS `user_contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_contact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `message` text COLLATE utf8mb4_general_ci NOT NULL,
+  `messaged_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_contact_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_contact`
+--
+
+LOCK TABLES `user_contact` WRITE;
+/*!40000 ALTER TABLE `user_contact` DISABLE KEYS */;
+INSERT INTO `user_contact` VALUES (1,7,'I Have not sufficient money to buy gown can you give me some discount ','2025-07-06 11:52:03');
+/*!40000 ALTER TABLE `user_contact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `user_type` varchar(50) COLLATE utf8mb4_general_ci DEFAULT 'user',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Dipa Bist','deepbist123456@gmil.com','58ba210c2d478f4d4891374797812c6d','avatar.jpg','admin','2026-05-26 10:15:00',NULL),(2,'Roshan Negi','roshan.negi2@example.com','029b75901ecf27f211ece91d64105789','avatar.jpg','admin','2026-05-26 10:30:00',NULL),(3,'Prakash Bhatt','prakash.bhatt@example.com','60612cf7512903882931e1484b47f47c','avatar.jpg','admin','2026-05-26 10:45:00',NULL),(4,'Dinesh Phulara','dinesh.phulara@example.com','2d3e7039a0ed70e24c0063595748ac6c','avatar.jpg','admin','2026-05-26 11:00:00',NULL),(5,'Roshan Negi','roshan.negi@example.com','077785b96c0ccc38ed1e05def15ae84c','avatar.jpg','user','2026-05-26 11:15:00',NULL),(6,'Prakash Bhatt','prakash.bhatt2@example.com','49f9ff3a98826af6cb10082688c8fba1','avatar.jpg','user','2026-05-26 11:30:00',NULL),(7,'Dinesh Phulara','dinesh.phulara2@example.com','f26818463ab554431e16f6d22d34e369','avatar.jpg','user','2026-05-26 11:45:00',NULL),(8,'Padam Dhami','padam.dhami@example.com','','https://lh3.googleusercontent.com/a/ACg8ocJjKD5-C0KGi7O-wUGjvHS2apl_Tv7YEwwLtr-1N3o9ReymwA=s96-c','user','2026-05-26 12:00:00',NULL),(9,'Nabin Koirala','nabin.koirala.deleted@example.com','f26818463ab554431e16f6d22d34e369','license.pdf','user','2026-05-26 12:15:00','2026-05-28 00:17:08'),(10,'Nabin Koirala','nabin.koirala@example.com','3ba51f1d2cdd597c15d515ea8c65684c','https://lh3.googleusercontent.com/a/ACg8ocLXt_GRj5O2VCbNDuWbfQcdlKCOC4QSozDpcJnD7P7BMeGcvw=s96-c','user','2026-05-26 12:30:00',NULL),(11,'Nabin Koirala','nabin.koirala2@example.com','327bc3324c740343cd3298a53cb49aec','avatar.jpg','user','2026-05-26 12:45:00',NULL),(13,'ffdp nepal','ffdpnepal@gmail.com','d6906ab1502f7c1f35cb3d121a117c5a','https://lh3.googleusercontent.com/a/ACg8ocLXt_GRj5O2VCbNDuWbfQcdlKCOC4QSozDpcJnD7P7BMeGcvw=s96-c','user','2026-05-28 00:53:34',NULL),(15,'gg','gg@gg.com','9cafeef08db2dd477098a0293e71f90a','avatar.jpg','user','2026-05-28 01:02:43',NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wishlist`
+--
+
+DROP TABLE IF EXISTS `wishlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wishlist` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_wishlist_item` (`user_id`,`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+LOCK TABLES `wishlist` WRITE;
+/*!40000 ALTER TABLE `wishlist` DISABLE KEYS */;
+INSERT INTO `wishlist` VALUES (1,11,4,'2026-05-27 23:54:36');
+/*!40000 ALTER TABLE `wishlist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping events for database 'E_Clothing_Store'
+--
+
+--
+-- Dumping routines for database 'E_Clothing_Store'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-05-28  1:25:22

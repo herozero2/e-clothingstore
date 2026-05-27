@@ -1,0 +1,53 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.product-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.product-image {
+    max-height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 128, 0, 0.3);
+}
+
+.category-badge {
+    background-color: #ffc107;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.price-tag {
+    font-size: 28px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.btn-style {
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+ /* Hover effect for Add to Cart and Back to Products buttons */
+.btn-success:hover,
+.btn-outline-secondary:hover {
+    background-color: #218838 !important;
+    color: white !important;
+    transform: scale(1.05);
+}

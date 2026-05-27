@@ -1,0 +1,109 @@
+/* edit_category.css */
+
+.edit-category-container {
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    position: relative;
+}
+
+/* Floating label style */
+form input[type="text"],
+form textarea {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 10px 8px 8px 8px;
+    font-size: 16px;
+    background: transparent;
+    transition: 0.3s ease;
+    outline: none;
+    resize: vertical;
+    color: #333;
+    border-radius: 0;
+}
+
+form input[type="text"]:focus,
+form textarea:focus {
+    border-bottom-color: #007bff;
+}
+
+form label {
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    color: #999;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.3s ease all;
+    font-weight: 500;
+}
+
+form input[type="text"]:focus + label,
+form input[type="text"]:not(:placeholder-shown) + label,
+form textarea:focus + label,
+form textarea:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 10px;
+    font-size: 13px;
+    color: #007bff;
+    background: #fff;
+    padding: 0 5px;
+}
+
+/* Form group wrapper to position label */
+.form-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+/* Button style */
+.button-group button {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    padding: 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-group button:hover {
+    background-color: #0056b3;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+/* Responsive */
+@media screen and (max-width: 640px) {
+    .edit-category-container {
+        padding: 20px;
+        margin: 20px;
+    }
+}

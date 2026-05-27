@@ -1,0 +1,226 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 50px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Main form container */
+form#editProductForm {
+    background: #ffffff;
+    width: 1150px;
+    max-width: 100%;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    position: relative;
+    animation: fadeIn 0.6s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+form#editProductForm::-webkit-scrollbar {
+    display: none;
+}
+
+form#editProductForm {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form heading */
+h2 {
+    color: #6a1b9a;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Form groups */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 18px 20px;
+    border: 2px solid #d1c4e9;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #fafafa;
+    color: #333;
+    transition: 0.3s ease;
+    resize: vertical;
+    appearance: none;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 120px;
+}
+
+.form-group label {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+    font-size: 14px;
+    color: #777;
+    background: #fff;
+    padding: 0 6px;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+/* Floating label */
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label,
+.form-group select:focus + label,
+.form-group select:valid + label {
+    top: -10px;
+    font-size: 12px;
+    color: #6a1b9a;
+}
+
+/* Input focus */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #6a1b9a;
+    background-color: #fff;
+}
+
+/* Button group */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-group button[type="submit"] {
+    background-color: #6a1b9a;
+    color: white;
+}
+
+.button-group button[type="submit"]:hover {
+    background-color: #4a148c;
+    transform: scale(1.03);
+}
+
+/* Inline group for flex fields */
+.inline-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+.inline-group .form-group {
+    flex: 1;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: 0.3s ease;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #000;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+}
+
+/* Select arrow fix */
+.form-group select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D'10'%20height%3D'6'%20viewBox%3D'0%200%2010%206'%20xmlns%3D'http://www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M0%200l5%206%205-6z'%20fill%3D'%23777'%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.2rem center;
+    background-size: 12px;
+}
+
+/* Image preview styling */
+.form-group img {
+    max-width: 180px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 8px;
+    display: block;
+}
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+    form#editProductForm {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .inline-group {
+        flex-direction: column;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+}

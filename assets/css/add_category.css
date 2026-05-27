@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 50px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+form#addCategoryForm {
+    background: #ffffff;
+    width: 1150px;
+    max-width: 100%;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    position: relative;
+    animation: fadeIn 0.6s ease;
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+form#addCategoryForm::-webkit-scrollbar {
+    display: none;
+}
+form#addCategoryForm {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    color: #6a1b9a;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 18px 20px;
+    border: 2px solid #d1c4e9;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #fafafa;
+    color: #333;
+    transition: 0.3s ease;
+    resize: vertical;
+    outline: none;
+}
+
+.form-group label {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+    font-size: 14px;
+    color: #777;
+    background: #fff;
+    padding: 0 6px;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 12px;
+    color: #6a1b9a;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #6a1b9a;
+    background-color: #fff;
+}
+
+/* Button group */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-group button[type="submit"] {
+    background-color: #6a1b9a;
+    color: white;
+}
+
+.button-group button[type="submit"]:hover {
+    background-color: #4a148c;
+    transform: scale(1.03);
+}
+
+.button-group .cancel-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.button-group .cancel-btn:hover {
+    background-color: #bdbdbd;
+    transform: scale(1.03);
+}
+
+/* Close button styling */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: 0.3s ease;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #000;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    form#addCategoryForm {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+}
