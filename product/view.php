@@ -1,12 +1,37 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/product_variants.php';
 $con = db_connect();
 if (!$con) {
     die("DB connection failed: " . mysqli_connect_error());
 }
 
-$result = mysqli_query($con, "SELECT * FROM product WHERE deleted_at IS NULL ORDER BY created_at DESC");
+ensure_product_variants_schema($con);
+
+$result = mysqli_query($con, "
+    SELECT p.*, c.name AS category_name
+    FROM product p
+    LEFT JOIN category c ON c.id = p.category_id
+    WHERE p.deleted_at IS NULL
+    ORDER BY p.created_at DESC
+");
 $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+$variantMap = [];
+$variantResult = mysqli_query($con, "
+    SELECT *
+    FROM productdetail
+    WHERE deleted_at IS NULL
+    ORDER BY variation_key ASC, variation_value ASC
+");
+while ($variantResult && $variant = mysqli_fetch_assoc($variantResult)) {
+    $variantMap[(int) $variant['product_id']][] = $variant;
+}
+
+foreach ($products as &$product) {
+    $product['variants'] = $variantMap[(int) $product['id']] ?? [];
+}
+unset($product);
 ?>
 
 <?php include '../includes/header.php'; ?>
@@ -69,6 +94,7 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <th>S.N.</th>
                     <th>Image</th>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Quantity</th>
@@ -83,11 +109,13 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     foreach ($products as $p):
                         $descShort = strlen($p['description']) > 80 ? substr($p['description'], 0, 80) . '...' : $p['description'];
                         $imgPath = "../assets/images/" . htmlspecialchars($p['image']);
+                        $productJson = htmlspecialchars(json_encode($p, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP), ENT_QUOTES, 'UTF-8');
                 ?>
                 <tr data-id="<?= $p['id'] ?>" data-name="<?= htmlspecialchars(strtolower($p['name'])) ?>" data-sku="<?= htmlspecialchars(strtolower($p['sku'])) ?>">
                     <td><?= $sn++ ?></td>
                     <td><img src="<?= $imgPath ?>" alt="<?= htmlspecialchars($p['name']) ?>" class="table-img" /></td>
                     <td><?= htmlspecialchars($p['name']) ?></td>
+                    <td><?= htmlspecialchars($p['category_name'] ?: 'Uncategorized') ?></td>
                     <td title="<?= htmlspecialchars($p['description']) ?>"><?= htmlspecialchars($descShort) ?></td>
                     <td><?= money((float) $p['price'], $con) ?></td>
                     <td><?= htmlspecialchars($p['quantity']) ?></td>
@@ -96,7 +124,7 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <td class="text-center">
                         <div class="actions">
                             <button class="btn view-btn" aria-label="View details of <?= htmlspecialchars($p['name']) ?>"
-                                onclick='openProductModal(<?= json_encode($p, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'>
+                                onclick='openProductModal(<?= $productJson ?>)'>
                                 <i class="fas fa-eye"></i>
                             </button>
                             <a href="edit.php?id=<?= $p['id'] ?>" class="btn edit-btn" aria-label="Edit <?= htmlspecialchars($p['name']) ?>">
@@ -110,7 +138,7 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     </td>
                 </tr>
                 <?php endforeach; else: ?>
-                <tr><td colspan="9" class="no-data">No products found.</td></tr>
+                <tr><td colspan="10" class="no-data">No products found.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -124,7 +152,7 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     <!-- Product Modal -->
     <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalName" style="display:none;">
-        <div class="modal-content">
+        <div class="modal-content product-preview-modal">
             <button class="modal-close-btn" aria-label="Close product details" onclick="closeProductModal()">
                 <i class="fas fa-times"></i>
             </button>
@@ -133,10 +161,20 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <div class="modal-details">
                     <h2 id="modalName"></h2>
                     <p id="modalDesc" class="desc-font"></p>
-                    <p><strong>Price:</strong> <span id="modalPrice"></span></p>
-                    <p><strong>Quantity:</strong> <span id="modalQty"></span></p>
-                    <p><strong>SKU:</strong> <span id="modalSKU"></span></p>
+                    <div class="product-detail-grid">
+                        <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                        <p><strong>Price:</strong> <span id="modalPrice"></span></p>
+                        <p><strong>Quantity:</strong> <span id="modalQty"></span></p>
+                        <p><strong>SKU:</strong> <span id="modalSKU"></span></p>
+                        <p><strong>Created:</strong> <span id="modalCreated"></span></p>
+                        <p><strong>Updated:</strong> <span id="modalUpdated"></span></p>
+                    </div>
+                    <div class="product-preview-status" id="modalStockStatus"></div>
                 </div>
+            </div>
+            <div class="product-preview-section">
+                <h3>Product Variants</h3>
+                <div id="modalVariants" class="product-variant-preview"></div>
             </div>
         </div>
     </div>
@@ -172,18 +210,65 @@ const modalDesc = document.getElementById('modalDesc');
 const modalPrice = document.getElementById('modalPrice');
 const modalQty = document.getElementById('modalQty');
 const modalSKU = document.getElementById('modalSKU');
+const modalCategory = document.getElementById('modalCategory');
+const modalCreated = document.getElementById('modalCreated');
+const modalUpdated = document.getElementById('modalUpdated');
+const modalStockStatus = document.getElementById('modalStockStatus');
+const modalVariants = document.getElementById('modalVariants');
 
 const imageViewModal = document.getElementById('imageViewModal');
 const largeImage = document.getElementById('largeImage');
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+function formatDate(value) {
+    if (!value) {
+        return 'Not available';
+    }
+    const date = new Date(String(value).replace(' ', 'T'));
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+}
 
 function openProductModal(product) {
     modalImage.src = '../assets/images/' + product.image;
     modalImage.alt = product.name + " image";
     modalName.textContent = product.name;
     modalDesc.textContent = product.description;
+    modalCategory.textContent = product.category_name || 'Uncategorized';
     modalPrice.textContent = <?= json_encode(currency_symbol($con)) ?> + ' ' + parseFloat(product.price).toFixed(2);
     modalQty.textContent = product.quantity;
     modalSKU.textContent = product.sku;
+    modalCreated.textContent = formatDate(product.created_at);
+    modalUpdated.textContent = formatDate(product.updated_at);
+    modalStockStatus.textContent = parseInt(product.quantity || 0, 10) > 0 ? 'In stock and visible to customers' : 'Out of stock';
+    modalStockStatus.className = parseInt(product.quantity || 0, 10) > 0 ? 'product-preview-status in-stock' : 'product-preview-status out-stock';
+
+    const variants = Array.isArray(product.variants) ? product.variants : [];
+    if (variants.length === 0) {
+        modalVariants.innerHTML = '<p class="text-muted mb-0">No variants are configured for this product.</p>';
+    } else {
+        modalVariants.innerHTML = variants.map(variant => {
+            const label = `${variant.variation_key || 'Option'}: ${variant.variation_value || ''}`;
+            const adjustment = parseFloat(variant.price_adjustment || 0);
+            const finalPrice = parseFloat(product.price || 0) + adjustment;
+            return `
+                <article class="variant-preview-card">
+                    <strong>${escapeHtml(label)}</strong>
+                    <span>SKU: ${escapeHtml(variant.variant_sku || 'Not set')}</span>
+                    <span>Stock: ${escapeHtml(variant.quantity || 0)}</span>
+                    <span>Price: <?= htmlspecialchars(currency_symbol($con)) ?> ${finalPrice.toFixed(2)}</span>
+                </article>
+            `;
+        }).join('');
+    }
+
     productModal.style.display = 'flex';
     modalName.focus();
 }

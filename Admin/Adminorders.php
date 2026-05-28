@@ -27,10 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['o
         }
         mysqli_query($con, "UPDATE orders SET order_status='Cancelled', deleted_at = NOW() WHERE id = $order_id");
     } else {
-        $trackingSql = $new_status === 'Shipped' || $new_status === 'Delivered'
-            ? ", tracking_id = '" . ($tracking_id !== '' ? $tracking_id : ('NP-Courier-' . str_pad((string) $order_id, 5, '0', STR_PAD_LEFT))) . "'"
-            : "";
-        mysqli_query($con, "UPDATE orders SET order_status='$new_status' $trackingSql WHERE id=$order_id");
+        if (in_array($new_status, ['Shipped', 'Delivered'], true) && $tracking_id === '') {
+            $tracking_id = 'NP-Courier-' . str_pad((string) $order_id, 5, '0', STR_PAD_LEFT);
+        }
+        $trackingSql = $tracking_id !== '' ? "'" . $tracking_id . "'" : "NULL";
+        mysqli_query($con, "UPDATE orders SET order_status='$new_status', tracking_id=$trackingSql WHERE id=$order_id");
     }
 
     header("Location: Adminorders.php");
@@ -111,6 +112,58 @@ $res = mysqli_query($con, $sql);
         text-align: center;
     }
 
+    .modal-content.order-view-content {
+        max-width: 760px;
+        width: min(94vw, 760px);
+        max-height: 88vh;
+        overflow-y: auto;
+        text-align: left;
+    }
+
+    .modal-content.order-update-content {
+        text-align: left;
+    }
+
+    .order-view-content .modal-title {
+        margin-bottom: 16px;
+    }
+
+    .order-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .order-detail-grid p,
+    .order-detail-products p {
+        margin: 0;
+        padding: 10px 12px;
+        border: 1px solid #dde5ef;
+        border-radius: 8px;
+        background: #f8fafc;
+        overflow-wrap: anywhere;
+    }
+
+    .order-detail-wide {
+        grid-column: 1 / -1;
+    }
+
+    .order-detail-products {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .order-summary-line {
+        margin: 10px 0 0;
+        padding: 10px 12px;
+        border: 1px solid #dde5ef;
+        border-radius: 8px;
+        background: #fff;
+        overflow-wrap: anywhere;
+    }
+
     .modal-product-images img {
         width: 100px;
         height: auto;
@@ -142,6 +195,11 @@ $res = mysqli_query($con, $sql);
 
         .modal-content {
             width: 90%;
+        }
+
+        .order-detail-grid,
+        .order-detail-products {
+            grid-template-columns: 1fr;
         }
     }
 
@@ -198,14 +256,14 @@ $res = mysqli_query($con, $sql);
                 <tr>
                     <th>Order ID</th>
                     <th>Customer Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Delivery Address</th>
+                    <th class="laptop-popup-only">Email</th>
+                    <th class="laptop-popup-only">Phone</th>
+                    <th class="laptop-popup-only">Delivery Address</th>
                     <th>Order Date</th>
-                    <th>Payment Method</th>
-                    <th>Product Names</th>
-                    <th>Shipping Charge</th>
-                    <th>Total Qty</th>
+                    <th class="laptop-popup-only">Payment Method</th>
+                    <th class="laptop-popup-only">Product Names</th>
+                    <th class="laptop-popup-only">Shipping Charge</th>
+                    <th class="laptop-popup-only">Total Qty</th>
                     <th>Total Price</th>
                     <th>Status</th>
                     <th>Tracking ID</th>
@@ -219,43 +277,31 @@ $res = mysqli_query($con, $sql);
                         <tr>
                             <td data-label="Order ID" class="mobile-keep">#<?= $order['order_id'] ?></td>
                             <td data-label="Customer" class="mobile-keep"><?= htmlspecialchars($order['order_name']) ?: htmlspecialchars($order['user_name']) ?></td>
-                            <td data-label="Email" class="mobile-popup-only"><?= htmlspecialchars($order['customer_email'] ?? '') ?></td>
-                            <td data-label="Phone" class="mobile-popup-only"><?= htmlspecialchars($order['customer_phone'] ?: 'Not provided') ?></td>
-                            <td data-label="Delivery Address" class="mobile-popup-only" title="<?= htmlspecialchars($order['shipping_address'] ?: 'Not provided') ?>">
+                            <td data-label="Email" class="mobile-popup-only laptop-popup-only"><?= htmlspecialchars($order['customer_email'] ?? '') ?></td>
+                            <td data-label="Phone" class="mobile-popup-only laptop-popup-only"><?= htmlspecialchars($order['customer_phone'] ?: 'Not provided') ?></td>
+                            <td data-label="Delivery Address" class="mobile-popup-only laptop-popup-only" title="<?= htmlspecialchars($order['shipping_address'] ?: 'Not provided') ?>">
                                 <?= htmlspecialchars(compact_order_address($order['shipping_address'] ?? '', 72)) ?>
                             </td>
                             <td data-label="Order Date" class="mobile-keep"><?= date('Y-m-d h:i A', strtotime($order['created_at'])) ?></td>
-                            <td data-label="Payment Method" class="mobile-popup-only"><?= htmlspecialchars($order['payment_method']) ?></td>
-                            <td data-label="Products" class="mobile-popup-only"><?= htmlspecialchars($order['product_names']) ?></td>
-                            <td data-label="Shipping Charge" class="mobile-popup-only"><?= money((float) $order['shipping_charge'], $con) ?></td>
-                            <td data-label="Total Qty" class="mobile-popup-only"><?= (int) $order['total_quantity'] ?></td>
+                            <td data-label="Payment Method" class="mobile-popup-only laptop-popup-only"><?= htmlspecialchars($order['payment_method']) ?></td>
+                            <td data-label="Products" class="mobile-popup-only laptop-popup-only"><?= htmlspecialchars($order['product_names']) ?></td>
+                            <td data-label="Shipping Charge" class="mobile-popup-only laptop-popup-only"><?= money((float) $order['shipping_charge'], $con) ?></td>
+                            <td data-label="Total Qty" class="mobile-popup-only laptop-popup-only"><?= (int) $order['total_quantity'] ?></td>
                             <td data-label="Total Price" class="mobile-keep"><?= money((float) $order['total_price'], $con) ?></td>
                             <td data-label="Status" class="mobile-keep mobile-status-cell">
-                                <?php $orderFormId = 'order-status-' . (int) $order['order_id']; ?>
-                                <form id="<?= $orderFormId ?>" method="POST" action="Adminorders.php" class="order-status-form d-flex align-items-center gap-2">
-                                    <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
-                                    <select name="order_status" class="form-select status-select">
-                                        <?php
-                                        $statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
-                                        foreach ($statuses as $status):
-                                            ?>
-                                            <option value="<?= $status ?>" <?= ($order['order_status'] === $status) ? 'selected' : '' ?>><?= $status ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <input type="hidden" name="confirmed_cancel" value="0">
-                                </form>
+                                <?php $statusClass = 'status-' . strtolower((string) ($order['order_status'] ?: 'pending')); ?>
+                                <span class="status-pill <?= htmlspecialchars($statusClass) ?>"><?= htmlspecialchars($order['order_status'] ?: 'Pending') ?></span>
                             </td>
                             <td data-label="Tracking ID" class="mobile-keep mobile-tracking-cell">
-                                    <input type="text" form="<?= $orderFormId ?>" name="tracking_id" class="form-control tracking-input" placeholder="Tracking ID"
-                                        value="<?= htmlspecialchars($order['tracking_id'] ?? '') ?>">
-                                    <button type="submit" form="<?= $orderFormId ?>" class="btn edit-btn mt-2" title="Update order">
-                                        <i class="fas fa-save"></i>
-                                    </button>
+                                <span class="tracking-chip"><?= htmlspecialchars(trim((string) ($order['tracking_id'] ?? '')) ?: 'Not assigned') ?></span>
                             </td>
                             <td data-label="Actions" class="text-center mobile-actions">
                                 <div class="actions">
                                     <button class="btn view-btn" onclick='openOrderModal(<?= $orderJson ?>)' title="View full order">
                                         <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn edit-btn" onclick='openOrderUpdateModal(<?= $orderJson ?>)' title="Update status and tracking">
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                     <a href="Orderdetailsdelete.php?id=<?= $order['order_id'] ?>" class="btn delete-btn"
                                         onclick="return confirm('Are you sure you want to delete this Orders ?');">
@@ -280,27 +326,61 @@ $res = mysqli_query($con, $sql);
     </div>
     <!-- Order View Modal -->
     <div id="orderModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content order-view-content">
             <span class="close-btn" onclick="closeOrderModal()">&times;</span>
-            <h2 class="modal-title"><i class="fas fa-box"></i>Customers Order </h2>
-            <p><strong>Customer:</strong> <span id="modalUserName"></span></p>
-            <p><strong>Email Address:</strong> <span id="modalEmail"></span></p>
-            <p><strong>Phone Number:</strong> <span id="modalPhone"></span></p>
-            <p><strong>Delivery Address:</strong> <span id="modalAddress"></span></p>
-            <p id="modalLocationWrap"><strong>Location Details:</strong> <span id="modalLocation"></span></p>
-            <p><strong>Order Date:</strong> <span id="modalDate"></span></p>
-            <p><strong>Payment Method:</strong> <span id="modalPayment"></span></p>
-            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-            <p><strong>Tracking ID:</strong> <span id="modalTracking"></span></p>
-            <div id="modalProducts"></div>
+            <h2 class="modal-title"><i class="fas fa-box"></i> Customer Order</h2>
+            <div class="order-detail-grid">
+                <p><strong>Customer:</strong> <span id="modalUserName"></span></p>
+                <p><strong>Email Address:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Phone Number:</strong> <span id="modalPhone"></span></p>
+                <p><strong>Order Date:</strong> <span id="modalDate"></span></p>
+                <p class="order-detail-wide"><strong>Delivery Address:</strong> <span id="modalAddress"></span></p>
+                <p class="order-detail-wide" id="modalLocationWrap"><strong>Location Details:</strong> <span id="modalLocation"></span></p>
+                <p><strong>Payment Method:</strong> <span id="modalPayment"></span></p>
+                <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+                <p class="order-detail-wide"><strong>Tracking ID:</strong> <span id="modalTracking"></span></p>
+            </div>
+            <div id="modalProducts" class="order-detail-products"></div>
             <div class="modal-product-images" id="modalImages"></div>
-            <p><strong>Shipping Charge:</strong> <span id="modalShipping"></span></p>
-            <p><strong>Total:</strong> <span id="modalTotal"></span></p>
+            <p class="order-summary-line"><strong>Shipping Charge:</strong> <span id="modalShipping"></span></p>
+            <p class="order-summary-line"><strong>Total:</strong> <span id="modalTotal"></span></p>
+        </div>
+    </div>
+    <div id="orderUpdateModal" class="modal">
+        <div class="modal-content order-update-content">
+            <span class="close-btn" onclick="closeOrderUpdateModal()">&times;</span>
+            <h2 class="modal-title"><i class="fas fa-edit"></i> Update Order</h2>
+            <p class="text-muted" id="updateOrderMeta"></p>
+            <form id="orderUpdateForm" method="POST" action="Adminorders.php" class="order-update-form">
+                <input type="hidden" name="order_id" id="updateOrderId">
+                <input type="hidden" name="confirmed_cancel" id="updateConfirmedCancel" value="0">
+                <label>
+                    <span>Order Status</span>
+                    <select name="order_status" id="updateOrderStatus" class="form-select status-select" required>
+                        <?php foreach (['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'] as $status): ?>
+                            <option value="<?= $status ?>"><?= $status ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label>
+                    <span>Tracking ID</span>
+                    <input type="text" name="tracking_id" id="updateTrackingId" class="form-control tracking-input" placeholder="Courier tracking ID">
+                </label>
+                <button type="submit" class="btn edit-btn order-update-save">
+                    <i class="fas fa-save"></i> Save Order Update
+                </button>
+            </form>
         </div>
     </div>
 </div>
 
 <script>
+    function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = value ?? '';
+        return div.innerHTML;
+    }
+
     function openOrderModal(order) {
         document.getElementById('modalUserName').innerText = order.order_name || order.user_name || 'Customer';
         document.getElementById('modalEmail').innerText = order.customer_email || 'Not provided';
@@ -319,8 +399,8 @@ $res = mysqli_query($con, $sql);
 
         // Product names and quantity
         let productHTML = `
-            <p><strong>Products:</strong> ${order.product_names}</p>
-            <p><strong>Total Quantity:</strong> ${order.total_quantity}</p>
+            <p><strong>Products:</strong> ${escapeHtml(order.product_names || 'Not provided')}</p>
+            <p><strong>Total Quantity:</strong> ${escapeHtml(order.total_quantity || 0)}</p>
         `;
         document.getElementById('modalProducts').innerHTML = productHTML;
 
@@ -342,6 +422,19 @@ $res = mysqli_query($con, $sql);
         document.getElementById('orderModal').style.display = 'none';
     }
 
+    function openOrderUpdateModal(order) {
+        document.getElementById('updateOrderId').value = order.order_id || '';
+        document.getElementById('updateOrderStatus').value = order.order_status || 'Pending';
+        document.getElementById('updateTrackingId').value = order.tracking_id || '';
+        document.getElementById('updateConfirmedCancel').value = '0';
+        document.getElementById('updateOrderMeta').innerText = `Order #${order.order_id} - ${order.order_name || order.user_name || 'Customer'}`;
+        document.getElementById('orderUpdateModal').style.display = 'block';
+    }
+
+    function closeOrderUpdateModal() {
+        document.getElementById('orderUpdateModal').style.display = 'none';
+    }
+
 </script>
 
 <!-- Bootstrap JS First -->
@@ -360,20 +453,18 @@ $res = mysqli_query($con, $sql);
         });
     });
 
-    document.querySelectorAll('.order-status-form').forEach(form => {
-        form.addEventListener('submit', function (event) {
-            const selectedValue = form.querySelector('select[name="order_status"]').value;
+    document.getElementById('orderUpdateForm')?.addEventListener('submit', function (event) {
+        const selectedValue = this.querySelector('select[name="order_status"]').value;
 
-            if (selectedValue === 'Cancelled') {
-                if (!confirm("Do you want to cancel and hide this order?")) {
-                    event.preventDefault();
-                    return;
-                }
-                form.querySelector('input[name="confirmed_cancel"]').value = '1';
-            } else {
-                form.querySelector('input[name="confirmed_cancel"]').value = '0';
+        if (selectedValue === 'Cancelled') {
+            if (!confirm("Do you want to cancel and hide this order?")) {
+                event.preventDefault();
+                return;
             }
-        });
+            this.querySelector('input[name="confirmed_cancel"]').value = '1';
+        } else {
+            this.querySelector('input[name="confirmed_cancel"]').value = '0';
+        }
     });
 
     // Pagination Logic
