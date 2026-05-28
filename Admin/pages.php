@@ -7,42 +7,70 @@ $success = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? 'save';
     $id = (int) ($_POST['id'] ?? 0);
-    $title = trim($_POST['title'] ?? '');
-    $slug = strtolower(trim($_POST['slug'] ?? ''));
-    $content = trim($_POST['content'] ?? '');
-    $sortOrder = (int) ($_POST['sort_order'] ?? 0);
-    $isActive = isset($_POST['is_active']) ? 1 : 0;
 
-    $slug = preg_replace('/[^a-z0-9-]+/', '-', $slug);
-    $slug = trim($slug, '-');
-
-    if ($title === '' || $slug === '' || $content === '') {
-        $error = 'Title, slug, and content are required.';
-    } else {
-        if ($id > 0) {
-            $stmt = mysqli_prepare($con, "UPDATE store_pages SET title=?, slug=?, content=?, sort_order=?, is_active=? WHERE id=?");
-            mysqli_stmt_bind_param($stmt, 'sssiii', $title, $slug, $content, $sortOrder, $isActive, $id);
-        } else {
-            $footerGroup = 'shop';
-            $stmt = mysqli_prepare($con, "INSERT INTO store_pages (title, slug, content, footer_group, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?)");
-            mysqli_stmt_bind_param($stmt, 'ssssii', $title, $slug, $content, $footerGroup, $sortOrder, $isActive);
-        }
-
+    if ($action === 'delete' && $id > 0) {
+        $stmt = mysqli_prepare($con, "UPDATE store_pages SET is_active = 0 WHERE id = ?");
+        mysqli_stmt_bind_param($stmt, 'i', $id);
         if (mysqli_stmt_execute($stmt)) {
-            $success = 'Page saved successfully.';
+            $success = 'Page hidden from footer successfully.';
         } else {
-            $error = 'Could not save page: ' . mysqli_error($con);
+            $error = 'Could not hide page: ' . mysqli_error($con);
         }
         mysqli_stmt_close($stmt);
+    } else {
+        $title = trim($_POST['title'] ?? '');
+        $slug = strtolower(trim($_POST['slug'] ?? ''));
+        $content = trim($_POST['content'] ?? '');
+        $sortOrder = (int) ($_POST['sort_order'] ?? 0);
+        $isActive = isset($_POST['is_active']) ? 1 : 0;
+
+        $slug = preg_replace('/[^a-z0-9-]+/', '-', $slug);
+        $slug = trim($slug, '-');
+
+        if ($title === '' || $slug === '' || $content === '') {
+            $error = 'Title, slug, and content are required.';
+        } else {
+            $duplicateStmt = mysqli_prepare($con, "SELECT id FROM store_pages WHERE slug = ? AND id <> ? LIMIT 1");
+            mysqli_stmt_bind_param($duplicateStmt, 'si', $slug, $id);
+            mysqli_stmt_execute($duplicateStmt);
+            $duplicateResult = mysqli_stmt_get_result($duplicateStmt);
+            $hasDuplicate = $duplicateResult && mysqli_num_rows($duplicateResult) > 0;
+            mysqli_stmt_close($duplicateStmt);
+
+            if ($hasDuplicate) {
+                $error = 'Another page already uses this slug. Please choose a unique slug.';
+            } else {
+                if ($id > 0) {
+                    $stmt = mysqli_prepare($con, "UPDATE store_pages SET title=?, slug=?, content=?, sort_order=?, is_active=? WHERE id=?");
+                    mysqli_stmt_bind_param($stmt, 'sssiii', $title, $slug, $content, $sortOrder, $isActive, $id);
+                } else {
+                    $footerGroup = 'shop';
+                    $stmt = mysqli_prepare($con, "INSERT INTO store_pages (title, slug, content, footer_group, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?)");
+                    mysqli_stmt_bind_param($stmt, 'ssssii', $title, $slug, $content, $footerGroup, $sortOrder, $isActive);
+                }
+
+                if (mysqli_stmt_execute($stmt)) {
+                    $success = 'Page saved successfully.';
+                } else {
+                    $error = 'Could not save page. Please check the page details and try again.';
+                }
+                mysqli_stmt_close($stmt);
+            }
+        }
     }
 }
 
 $editId = (int) ($_GET['edit'] ?? 0);
 $editPage = null;
 if ($editId > 0) {
-    $editResult = mysqli_query($con, "SELECT * FROM store_pages WHERE id = $editId");
+    $stmt = mysqli_prepare($con, "SELECT * FROM store_pages WHERE id = ? LIMIT 1");
+    mysqli_stmt_bind_param($stmt, 'i', $editId);
+    mysqli_stmt_execute($stmt);
+    $editResult = mysqli_stmt_get_result($stmt);
     $editPage = $editResult ? mysqli_fetch_assoc($editResult) : null;
+    mysqli_stmt_close($stmt);
 }
 
 $pages = [];
@@ -67,6 +95,7 @@ while ($result && $row = mysqli_fetch_assoc($result)) {
     <div class="admin-two-column">
         <div>
             <form class="admin-form-card" method="POST">
+                <input type="hidden" name="action" value="save">
                 <input type="hidden" name="id" value="<?= (int) ($editPage['id'] ?? 0) ?>">
                 <div class="admin-form-grid">
                     <label>
@@ -107,7 +136,7 @@ while ($result && $row = mysqli_fetch_assoc($result)) {
                             <th>Page</th>
                             <th>Slug</th>
                             <th>Status</th>
-                            <th>Edit</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,7 +145,23 @@ while ($result && $row = mysqli_fetch_assoc($result)) {
                                 <td><?= htmlspecialchars($page['title']) ?></td>
                                 <td><?= htmlspecialchars($page['slug']) ?></td>
                                 <td><?= (int) $page['is_active'] === 1 ? 'Visible' : 'Hidden' ?></td>
-                                <td><a class="btn edit-btn" href="pages.php?edit=<?= (int) $page['id'] ?>"><i class="fas fa-edit"></i></a></td>
+                                <td>
+                                    <div class="actions">
+                                        <a class="btn view-btn" href="../user/page.php?slug=<?= urlencode($page['slug']) ?>" target="_blank" rel="noopener" title="Preview page">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a class="btn edit-btn" href="pages.php?edit=<?= (int) $page['id'] ?>" title="Edit page">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form method="POST" style="display:inline" onsubmit="return confirm('Hide this page from the footer?');">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?= (int) $page['id'] ?>">
+                                            <button type="submit" class="btn delete-btn" title="Hide page">
+                                                <i class="fas fa-eye-slash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

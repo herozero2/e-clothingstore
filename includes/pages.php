@@ -18,6 +18,28 @@ function ensure_store_pages_table(mysqli $con): void
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
     ");
 
+    $columns = [];
+    $result = mysqli_query($con, "SHOW COLUMNS FROM store_pages");
+    while ($result && $row = mysqli_fetch_assoc($result)) {
+        $columns[] = $row['Field'];
+    }
+
+    $missing = [
+        'slug' => "ADD slug varchar(120) NOT NULL DEFAULT '' AFTER id",
+        'title' => "ADD title varchar(180) NOT NULL DEFAULT '' AFTER slug",
+        'content' => "ADD content mediumtext AFTER title",
+        'footer_group' => "ADD footer_group varchar(50) NOT NULL DEFAULT 'shop' AFTER content",
+        'sort_order' => "ADD sort_order int NOT NULL DEFAULT 0 AFTER footer_group",
+        'is_active' => "ADD is_active tinyint(1) NOT NULL DEFAULT 1 AFTER sort_order",
+        'updated_at' => "ADD updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER is_active",
+    ];
+
+    foreach ($missing as $column => $definition) {
+        if (!in_array($column, $columns, true)) {
+            mysqli_query($con, "ALTER TABLE store_pages $definition");
+        }
+    }
+
     $countResult = mysqli_query($con, "SELECT COUNT(*) AS total FROM store_pages");
     $count = (int) (mysqli_fetch_assoc($countResult)['total'] ?? 0);
     if ($count > 0) {

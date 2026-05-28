@@ -1,14 +1,11 @@
 <?php
-include '../includes/header.php';
-
+require_once __DIR__ . '/../includes/admin_auth.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/product_variants.php';
 
-$con = db_connect();
-if (!$con) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
+$con = require_admin(null, '../Admin/Adminlogin.php');
 ensure_product_variants_schema($con);
+$error = '';
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) {
@@ -21,7 +18,7 @@ $result = mysqli_query($con, $query);
 $product = $result ? mysqli_fetch_assoc($result) : null;
 
 if (!$product) {
-    echo "<p>Product not found.</p>";
+    header("Location: view.php");
     exit;
 }
 
@@ -36,40 +33,53 @@ $image = $product['image']; // current image filename
 $variants = get_product_variants($con, $id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $desc = str_replace("'", "", $_POST['description']);
-    $price = $_POST['price'];
-    $quantity = $_POST['quantity'];
-    $sku = $_POST['sku'];
-    $category_id = $_POST['category_id'];
+    $name = trim($_POST['name'] ?? '');
+    $desc = trim($_POST['description'] ?? '');
+    $price = max(0, (float) ($_POST['price'] ?? 0));
+    $quantity = max(0, (int) ($_POST['quantity'] ?? 0));
+    $sku = trim($_POST['sku'] ?? '');
+    $category_id = (int) ($_POST['category_id'] ?? 0);
 
     if (!empty($_FILES['userfile']['name'])) {
-        $image = basename($_FILES['userfile']['name']);
-        $upload_file = $upload_dir . $image;
-        move_uploaded_file($_FILES['userfile']['tmp_name'], $upload_file);
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/avif'];
+        if (!in_array($_FILES['userfile']['type'], $allowedTypes, true)) {
+            $error = 'Only JPG, PNG, WEBP, and AVIF images are allowed.';
+        } elseif ($_FILES['userfile']['error'] !== UPLOAD_ERR_OK) {
+            $error = 'Product image upload failed.';
+        } else {
+            $image = basename($_FILES['userfile']['name']);
+            $upload_file = $upload_dir . $image;
+            if (!move_uploaded_file($_FILES['userfile']['tmp_name'], $upload_file)) {
+                $error = 'Could not save the uploaded product image.';
+            }
+        }
     }
 
-    // Update query
-    $sql_update = "UPDATE product SET 
-        name = '$name', 
-        description = '$desc', 
-        image = '$image', 
-        price = $price, 
-        quantity = $quantity, 
-        sku = '$sku', 
-        category_id = $category_id
-        WHERE id = $id";
+    if ($error === '') {
+        if ($name === '' || $desc === '' || $sku === '' || $category_id <= 0) {
+            $error = 'Product name, description, SKU, and category are required.';
+        } else {
+            $stmt = mysqli_prepare($con, "
+                UPDATE product
+                SET name = ?, description = ?, image = ?, price = ?, quantity = ?, sku = ?, category_id = ?
+                WHERE id = ?
+            ");
+            mysqli_stmt_bind_param($stmt, 'sssdisii', $name, $desc, $image, $price, $quantity, $sku, $category_id, $id);
+            $res_update = mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
 
-    $res_update = mysqli_query($con, $sql_update);
-
-    if ($res_update) {
-        save_product_variants($con, $id, $_POST);
-        header("Location: view.php");
-        exit;
-    } else {
-        echo "<p style='color:red;'>Error updating product: " . mysqli_error($con) . "</p>";
+            if ($res_update) {
+                save_product_variants($con, $id, $_POST);
+                header("Location: view.php");
+                exit;
+            } else {
+                $error = "Error updating product: " . mysqli_error($con);
+            }
+        }
     }
 }
+
+include '../includes/header.php';
 ?>
 
 <section class="add-product-container">
@@ -82,6 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             </div>
             <button type="button" class="close-btn" onclick="window.location.href='view.php'" aria-label="Back to products">&times;</button>
         </div>
+
+        <?php if ($error !== ''): ?>
+            <div class="message-container error-msg"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
 
         <div class="inline-group">
             <div class="form-group">

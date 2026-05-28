@@ -9,18 +9,21 @@ if (!$con) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $name = trim(mysqli_real_escape_string($con, $_POST['name']));
-    $desc = trim(mysqli_real_escape_string($con, $_POST['description']));
+    $name = trim($_POST['name'] ?? '');
+    $desc = trim($_POST['description'] ?? '');
 
     if ($name === '') {
         echo "<script>alert('Category name is required.');</script>";
     } else {
-        $sql = "INSERT INTO category (name, description) VALUES ('$name', '$desc')";
-        if (mysqli_query($con, $sql)) {
+        $stmt = mysqli_prepare($con, "INSERT INTO category (name, description) VALUES (?, ?)");
+        mysqli_stmt_bind_param($stmt, 'ss', $name, $desc);
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
             echo "<script> window.location.href='view_category.php';</script>";
             exit;
         } else {
             echo "<script>alert('Error: " . mysqli_error($con) . "');</script>";
+            mysqli_stmt_close($stmt);
         }
     }
 }

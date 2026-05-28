@@ -1,41 +1,49 @@
 <?php
-include '../includes/header.php';
+require_once __DIR__ . '/../includes/admin_auth.php';
 require_once __DIR__ . '/../includes/db.php';
-$con = db_connect();
-if (!$con) die("Connection failed: " . mysqli_connect_error());
+$con = require_admin(null, '../Admin/Adminlogin.php');
 
 // Get category ID
-$id = $_GET['id'] ?? null;
-if (!$id) {
+$id = (int) ($_GET['id'] ?? 0);
+if ($id <= 0) {
     header("Location: view_category.php");
     exit;
 }
 
 // Fetch category details
-$query = mysqli_query($con, "SELECT * FROM category WHERE id = '$id' AND deleted_at IS NULL");
-$category = mysqli_fetch_assoc($query);
+$stmt = mysqli_prepare($con, "SELECT * FROM category WHERE id = ? AND deleted_at IS NULL LIMIT 1");
+mysqli_stmt_bind_param($stmt, 'i', $id);
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
+$category = $query ? mysqli_fetch_assoc($query) : null;
+mysqli_stmt_close($stmt);
 
 if (!$category) {
-    echo "Category not found.";
+    header("Location: view_category.php");
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["submit"])) {
-    $name = mysqli_real_escape_string($con, $_POST['name']);
-    $description = mysqli_real_escape_string($con, $_POST['description']);
+    $name = trim($_POST['name'] ?? '');
+    $description = trim($_POST['description'] ?? '');
 
     if (empty($name)) {
         $error = "Category name is required.";
     } else {
-        $update_sql = "UPDATE category SET name = '$name', description = '$description' WHERE id = '$id'";
-        if (mysqli_query($con, $update_sql)) {
+        $stmt = mysqli_prepare($con, "UPDATE category SET name = ?, description = ? WHERE id = ?");
+        mysqli_stmt_bind_param($stmt, 'ssi', $name, $description, $id);
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
             header("Location: view_category.php");
             exit;
         } else {
             $error = "Error updating category: " . mysqli_error($con);
+            mysqli_stmt_close($stmt);
         }
     }
 }
+
+include '../includes/header.php';
 ?>
 
 <section class="edit-category-container">

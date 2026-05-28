@@ -69,25 +69,23 @@ $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
             </tbody>
         </table>
     </div>
-</section>
 
-<!-- Category Modal -->
-<div id="categoryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalCategoryName" style="display:none;">
-    <div class="modal-content">
-        <button class="modal-close-btn" aria-label="Close category details" onclick="closeCategoryModal()">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="modal-body">
-            <div class="modal-details">
-                <h2 id="modalCategoryName"></h2>
-                <p id="modalCategoryDesc" class="desc-font"></p>
-                <p><strong>Created At:</strong> <span id="modalCategoryCreated"></span></p>
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalCategoryName" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close-btn" aria-label="Close category details" onclick="closeCategoryModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <div class="modal-details">
+                    <h2 id="modalCategoryName"></h2>
+                    <p id="modalCategoryDesc" class="desc-font"></p>
+                    <p><strong>Created At:</strong> <span id="modalCategoryCreated"></span></p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-<?php include '../includes/footer.php'; ?>
 
 <script>
 
@@ -135,3 +133,5 @@ function closeCategoryModal() {
     categoryModal.style.display = 'none';
 }
 </script>
+
+<?php include '../includes/footer.php'; ?>
