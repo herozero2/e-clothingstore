@@ -23,12 +23,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 ```
 
-4. Install PHP dependencies for the user mail/contact pages:
-
-```bash
-cd user
-composer install
-```
+4. Required mail runtime files are included in the repository. Running Composer is optional unless you want to refresh third-party packages during development.
 
 5. Open the website:
 
@@ -39,8 +34,13 @@ http://localhost/ecloths/
 ## Admin Login
 
 ```text
-Email: deepbist123456@gmil.com
-Password: Dipa@123
+Dinesh Phulara
+Email: dinesh@gmail.com
+Password: @Fwu1234
+
+Nabin Koirala
+Email: nabin@gmail.com
+Password: @Fwu1234
 ```
 
 ## Important Files
