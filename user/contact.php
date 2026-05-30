@@ -1,7 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 
-require 'vendor/autoload.php'; 
+require_once __DIR__ . '/../includes/phpmailer_loader.php';
 
 session_start();
 require_once __DIR__ . '/../includes/db.php';

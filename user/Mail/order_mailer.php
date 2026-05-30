@@ -1,8 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-//Load Composer's autoloader (created by composer, not included with PHPMailer)
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../includes/phpmailer_loader.php';
 require_once __DIR__ . '/../../includes/smtp.php';
 function mailer($to_email, $to_name, $subject, $message)
 {
