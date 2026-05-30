@@ -1,5 +1,7 @@
 # E-Clothing Store
 
+Minor Project By Nabin Koirala, Dinesh Phulara & Padam Dhami
+
 PHP/MySQL ecommerce website for clothing products with storefront browsing, product variants, cart, checkout, customer accounts, reviews, wishlists, and a complete admin panel.
 
 ## Quick Setup
